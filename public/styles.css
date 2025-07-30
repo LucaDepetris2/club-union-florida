@@ -256,30 +256,6 @@ nav a:hover {
   border-top: 1px solid #ccc;
 }
 
-/* ===================== */
-/* 📱 Responsive ajustes  */
-/* ===================== */
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  header h1::before {
-    width: 32px;
-    height: 32px;
-  }
-
-  nav {
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-
-  header::before {
-    width: 140px;
-    height: 45px;
-  }
-}
 
 /* ========================= */
 /* 🖱️ Enlaces de "Leer más" */
@@ -458,25 +434,39 @@ section div strong {
   header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem;
+    padding: 1rem 1rem 0.5rem 1rem;
   }
 
   header::before {
-    width: 160px;
-    height: 50px;
-    margin-bottom: 0.5rem;
+    width: 140px;
+    height: 45px;
     margin-right: 0;
+    margin-bottom: 0.75rem;
   }
 
   nav {
     flex-wrap: wrap;
-    gap: 0.5rem;
     width: 100%;
+    gap: 0.25rem;
   }
 
   nav a {
-    flex: 1 1 auto;
+    flex: 1 1 45%;
     text-align: center;
-    padding: 0.5rem;
+    background-color: var(--primary);
+    padding: 0.5rem 0;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  nav a:hover {
+    background-color: var(--secondary);
+  }
+
+  .container {
+    margin-top: 8rem;
+    padding: 1rem;
   }
 }
+
