@@ -1,0 +1,455 @@
+/* ==================================== */
+/* 🎨 Variables de color y fuente base  */
+/* ==================================== */
+:root {
+  --primary: #003366;
+  /* Azul oscuro institucional */
+  --secondary: #d90429;
+  /* Rojo fuerte de acento */
+  --light: #f8f9fa;
+  /* Blanco claro */
+  --gray: #e1e1e1;
+  --dark: #0b0b0b;
+  --text: #111;
+  --accent: #d90429;
+  --background: #f4f6f8;
+  /* Fondo general suave */
+}
+
+/* ===================== */
+/* 🔤 Tipografía general */
+/* ===================== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* =============== */
+/* 🔝 Encabezado   */
+/* =============== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: var(--primary);
+  color: var(--light);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+  font-size: 1.3rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo institucional como fondo */
+header::before {
+  content: '';
+  display: inline-block;
+  width: 220px;
+  /* antes 160px */
+  height: 70px;
+  /* antes 50px */
+  background-image: url('/img/logo.jpg');
+  /* o .png si usás el nuevo */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left;
+  margin-right: 1rem;
+}
+
+
+/* ================= */
+/* 🔗 Navegación     */
+/* ================= */
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: var(--light);
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: var(--secondary);
+}
+
+/* ======================= */
+/* 🧱 Contenedor principal */
+/* ======================= */
+.container {
+  max-width: 1000px;
+  margin: 6rem auto 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.img-princ {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================= */
+/* 🏠 Sección especial de portada (opcional) */
+/* ========================================= */
+.home-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: linear-gradient(to bottom right, #eaf0f6, #ffffff);
+  padding-top: 5rem;
+}
+
+.home-intro {
+  background: white;
+  padding: 2rem;
+  max-width: 800px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.home-intro h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+}
+
+.home-intro img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ================= */
+/* 📰 Noticias (cards) */
+/* ================= */
+.card {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 3rem auto;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 0;
+}
+
+.card-content {
+  padding: 2rem;
+  line-height: 1.75;
+  color: #222;
+}
+
+.card-title {
+  font-size: 1.8rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.card-text {
+  font-size: 1.05rem;
+  color: #444;
+  text-align: justify;
+}
+
+.card-content a {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-weight: bold;
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.card-content a:hover {
+  text-decoration: underline;
+}
+
+/* =================== */
+/* 🏀 Jugadoras (grid) */
+/* =================== */
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  padding: 6rem 1rem 2rem 1rem;
+}
+
+.player-card {
+  width: 100%;
+  max-width: 320px;
+  background-color: white;
+  color: var(--text);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.player-card:hover {
+  transform: translateY(-6px);
+}
+
+.player-card img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top;
+}
+
+.player-card .info {
+  font-weight: bold;
+  text-align: center;
+  padding: 0.5rem;
+  background-color: var(--primary);
+  color: white;
+}
+
+.player-card .description {
+  display: none;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  background-color: #f0f0f0;
+  color: #111;
+  border-top: 1px solid #ccc;
+}
+
+/* ===================== */
+/* 📱 Responsive ajustes  */
+/* ===================== */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header h1::before {
+    width: 32px;
+    height: 32px;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  header::before {
+    width: 140px;
+    height: 45px;
+  }
+}
+
+/* ========================= */
+/* 🖱️ Enlaces de "Leer más" */
+/* ========================= */
+.news-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--secondary);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+/* ======================= */
+/* 📍 Footer del sitio     */
+/* ======================= */
+.site-footer {
+  background-color: var(--primary);
+  color: var(--light);
+  padding: 1.5rem 1rem;
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-instagram img {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.3s ease;
+  filter: brightness(0) invert(1);
+}
+
+.footer-instagram:hover img {
+  transform: scale(1.1);
+  filter: brightness(0) invert(0.7);
+}
+
+html,
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+  /* ✅ Esto empuja el footer hacia abajo */
+}
+
+.site-footer {
+  background-color: var(--primary);
+  color: var(--light);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+/* ============================ */
+/* 🛠 Panel de Administración   */
+/* ============================ */
+#admin-container {
+  max-width: 800px;
+  margin-top: 6rem;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+#admin-container h2 {
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+section {
+  margin-bottom: 3rem;
+  border-top: 1px solid #ccc;
+  padding-top: 2rem;
+}
+
+section h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="file"],
+form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  background: #f9f9f9;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+form button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: var(--secondary);
+}
+
+section div {
+  background-color: #f1f1f1;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+section div strong {
+  flex: 1;
+  color: var(--primary);
+}
+
+/* Botones de edición */
+.edit,
+.delete {
+  background-color: #ccc;
+  border: none;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #dc3545;
+  color: white;
+}
