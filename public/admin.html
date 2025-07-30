@@ -9,12 +9,16 @@
 </head>
 <body>
   <header>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="news.html">Noticias</a>
-      <a href="players.html">Jugadoras</a>
-      <a href="admin.html">Administración</a>
-    </nav>
+<nav class="navbar">
+  <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+  <div class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="news.html">Noticias</a>
+    <a href="players.html">Jugadoras</a>
+    <a href="admin.html">Administración</a>
+  </div>
+</nav>
+
   </header>
   <div class="container" id="admin-container">
     <h2>Iniciar Sesión</h2>
@@ -34,6 +38,16 @@
     </a>
   </div>
 </footer>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.menu-toggle');
+    const links = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('show');
+    });
+  });
+</script>
+
 
 </body>
 </html>
