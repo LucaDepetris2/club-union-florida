@@ -19,6 +19,9 @@ async function loadNews() {
       container.textContent = 'No hay noticias disponibles.';
       return;
     }
+
+    data.sort((a, b) => new Date(b.date + "T00:00") - new Date(a.date + "T00:00"));
+
     data.forEach(item => {
       container.appendChild(renderNewsCard(item, false));
     });
@@ -27,71 +30,80 @@ async function loadNews() {
 
 function renderNewsCard(news, full = false) {
   const card = document.createElement('div');
-  card.className = 'card';
+  card.className = 'news-card';
   if (full) card.classList.add('full');
 
-  // Imagen primero
   let img = null;
   if (news.image) {
     img = document.createElement('img');
     img.src = news.image;
     img.alt = news.title || 'Imagen de la noticia';
-    card.appendChild(img);
   }
 
-  // Contenido
   const content = document.createElement('div');
-  content.className = 'card-content';
+  content.className = 'news-card-content';
 
-  // 1️⃣ Título
   const titleEl = document.createElement(full ? 'h2' : 'h3');
-  titleEl.className = 'card-title';
+  titleEl.className = 'news-card-title';
   titleEl.textContent = news.title;
   content.appendChild(titleEl);
 
-  // 2️⃣ Copete
   if (news.subtitle) {
     const subtitleEl = document.createElement('p');
-    subtitleEl.className = 'card-subtitle';
+    subtitleEl.className = 'news-card-subtitle';
     subtitleEl.textContent = news.subtitle;
     content.appendChild(subtitleEl);
   }
 
-  // 3️⃣ Fecha
+  if (img && full) {
+    content.appendChild(img);
+  }
+
   if (news.date) {
+    const [yyyy, mm, dd] = news.date.split("-");
+    const formatted = `${dd}/${mm}/${yyyy}`;
     const dateEl = document.createElement('p');
-    dateEl.className = 'card-date';
-    dateEl.textContent = new Date(news.date).toLocaleDateString('es-AR', {
-      year: 'numeric', month: 'long', day: 'numeric'
-    });
+    dateEl.className = 'news-card-date';
+    dateEl.textContent = formatted;
     content.appendChild(dateEl);
   }
 
-  // 4️⃣ Texto
   const desc = document.createElement('p');
-  desc.className = 'card-text';
+  desc.className = 'news-card-text';
   desc.innerHTML = full ? news.content : (
     news.content.substring(0, 200) + (news.content.length > 200 ? '...' : '')
   );
   content.appendChild(desc);
 
-  // 🔹 Botón de cerrar (definido antes)
+  const expandLink = document.createElement('a');
+  expandLink.textContent = 'Leer más';
+  expandLink.className = 'news-link';
+
   const collapseLink = document.createElement('a');
   collapseLink.textContent = '✖ Cerrar';
   collapseLink.className = 'news-link';
   collapseLink.style.display = full ? 'inline-block' : 'none';
+
   collapseLink.addEventListener('click', e => {
     e.preventDefault();
     card.classList.remove('full');
+
     desc.innerHTML = news.content.substring(0, 200) + (news.content.length > 200 ? '...' : '');
     collapseLink.style.display = 'none';
-    if (!content.contains(expandLink)) content.appendChild(expandLink);
+
+    if (img && content.contains(img)) {
+      content.removeChild(img);
+    }
+
+    if (img && !card.contains(img)) {
+      card.insertBefore(img, content);
+    }
+
+    if (!content.contains(expandLink)) {
+      content.appendChild(expandLink);
+    }
   });
 
-  // 🔹 Botón "Leer más"
-  const expandLink = document.createElement('a');
-  expandLink.textContent = 'Leer más';
-  expandLink.className = 'news-link';
   if (!full) {
     expandLink.addEventListener('click', e => {
       e.preventDefault();
@@ -99,26 +111,20 @@ function renderNewsCard(news, full = false) {
       desc.innerHTML = news.content;
       expandLink.remove();
       collapseLink.style.display = 'inline-block';
+      if (img && card.contains(img)) {
+        card.removeChild(img);
+        content.insertBefore(img, content.querySelector('.news-card-date') || desc);
+      }
     });
     content.appendChild(expandLink);
   }
 
-  if (full) {
-    content.appendChild(collapseLink);
-  } else {
-    content.appendChild(collapseLink); // Siempre está en el DOM pero oculto
-  }
-
+  content.appendChild(collapseLink);
+  if (!full && img) card.appendChild(img);
   card.appendChild(content);
+
   return card;
 }
-
-
-
-
-
-
-
 
 document.addEventListener('DOMContentLoaded', loadNews);
 

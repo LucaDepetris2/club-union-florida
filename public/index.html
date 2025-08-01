@@ -9,80 +9,85 @@
 </head>
 
 <body>
-<header>
-  <nav class="navbar">
-    <div class="nav-logo">
-      <a href="index.html">
-        <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
-      </a>
-    </div>
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">
+        <a href="index.html">
+          <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
+        </a>
+      </div>
 
-    <!-- Botón hamburguesa -->
-    <div class="menu-toggle">&#9776;</div>
+      <!-- Botón hamburguesa -->
+      <div class="menu-toggle">&#9776;</div>
 
-    <div class="nav-center">
-      <a href="index.html">Inicio</a>
-      <a href="history.html">Historia</a>
-      <a href="news.html">Noticias</a>
-      <a href="players.html">Liga Nacional</a>
-      <a href="contact.html">Contacto</a>
-    </div>
+      <div class="nav-center">
+        <a href="index.html">Inicio</a>
+        <a href="history.html">Historia</a>
+        <a href="news.html">Noticias</a>
+        <a href="players.html">Liga Nacional</a>
+        <a href="afmb.html">AFMB</a>
+        <a href="contact.html">Contacto</a>
+      </div>
 
-    <div class="nav-icons">
-      <a href="mailto:cuf.femenino@gmail.com" target="_blank" aria-label="Mail">
-        <img src="img/mail.svg" alt="Mail" />
-      </a>
-      <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
-        <img src="img/instagram.svg" alt="Instagram" />
-      </a>
-      <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
-        <img src="img/tiktok.svg" alt="TikTok" />
-      </a>
-    </div>
-  </nav>
-</header>
+      <div class="nav-icons">
+        <a href="mailto:cuf.femenino@gmail.com" target="_blank" aria-label="Mail">
+          <img src="img/mail.svg" alt="Mail" />
+        </a>
+        <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
+          <img src="img/instagram.svg" alt="Instagram" />
+        </a>
+        <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
+          <img src="img/tiktok.svg" alt="TikTok" />
+        </a>
+      </div>
+    </nav>
+  </header>
 
-  
+
   <div class="container">
     <h2>Club Unión Florida Basquet Femenino</h2>
     <img class="img-princ" src="img/equipo2.jpg" alt="">
+    <p><strong>Bienvenidos al sitio oficial de Club Unión Florida Basquet Femenino.</strong> Cuna de grandes talentos y
+      referente del básquet argentino. Con una rica trayectoria de formación y numerosos logros en el plano nacional e
+      internacional, el club se destaca por su compromiso con el desarrollo deportivo y humano de sus jugadoras, siendo
+      protagonista constante en la élite del básquet femenino.</p>
   </div>
 
-<footer class="site-footer">
-  <p class="footer-title">Nuestros sponsors</p>
+  <footer class="site-footer">
+    <p class="footer-title">Nuestros sponsors</p>
 
-  <div class="footer-sponsors">
-    <a href="https://purobasquet.com" target="_blank">
-      <img src="img/sponsor1.png" alt="purobasquet">
-    </a>
-    <a href="https://recicladosterra.com" target="_blank">
-      <img src="img/sponsor2.png" alt="terra">
-    </a>
-    <a href="https://www.fleetsa.com.ar" target="_blank">
-      <img src="img/sponsor3.png" alt="fleetsa">
-    </a>
-  </div>
+    <div class="footer-sponsors">
+      <a href="https://purobasquet.com" target="_blank">
+        <img src="img/sponsor1.png" alt="purobasquet">
+      </a>
+      <a href="https://recicladosterra.com" target="_blank">
+        <img src="img/sponsor2.png" alt="terra">
+      </a>
+      <a href="https://www.fleetsa.com.ar" target="_blank">
+        <img src="img/sponsor3.png" alt="fleetsa">
+      </a>
+    </div>
 
-  <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
-</footer>
+    <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
+  </footer>
 
 
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('.nav-center');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.querySelector('.menu-toggle');
+      const menu = document.querySelector('.nav-center');
 
-  toggle.addEventListener('click', () => {
-    menu.classList.toggle('show');
-  });
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('show');
+      });
 
-  // Opcional: cerrar el menú al hacer click en un link
-  menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => menu.classList.remove('show'));
-  });
-});
-</script>
+      // Opcional: cerrar el menú al hacer click en un link
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => menu.classList.remove('show'));
+      });
+    });
+  </script>
 
 
 </body>
