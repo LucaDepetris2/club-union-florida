@@ -7,7 +7,8 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-const router = jsonServer.router('db.json');
+const router = jsonServer.router('/mnt/data/db.json'); // si montás ahí el disco
+
 const middlewares = jsonServer.defaults();
 
 const PORT = process.env.PORT || 3000;
