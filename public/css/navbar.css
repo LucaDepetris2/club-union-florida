@@ -19,8 +19,11 @@ header {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Logo */
 .nav-logo {
     flex: 0 0 auto;
+    display: flex;
+    align-items: center;
 }
 
 .nav-logo img,
@@ -28,8 +31,14 @@ header {
     height: 60px;
     width: auto;
     display: block;
+    transition: transform 0.3s ease;
 }
 
+.nav-logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Centro */
 .nav-center {
     display: flex;
     justify-content: center;
@@ -50,6 +59,7 @@ header {
     background-color: var(--secondary);
 }
 
+/* Íconos derecha */
 .nav-icons {
     flex: 0 0 auto;
     display: flex;
@@ -68,12 +78,23 @@ header {
     filter: brightness(0) invert(0.7);
 }
 
-/* Responsive navbar */
+/* ✅ Responsive */
+@media (max-width: 1024px) {
+    .nav-center {
+        gap: 1rem;
+    }
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
         align-items: center;
         gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .nav-logo img {
+        height: 50px;
     }
 
     .nav-center {
@@ -86,3 +107,20 @@ header {
         justify-content: center;
     }
 }
+
+@media (max-width: 480px) {
+    .nav-logo img {
+        height: 40px;
+    }
+
+    .nav-center a {
+        font-size: 0.9rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .nav-icons a img {
+        width: 20px;
+        height: 20px;
+    }
+}
+

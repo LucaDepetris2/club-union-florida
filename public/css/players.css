@@ -47,3 +47,14 @@
     color: #111;
     border-top: 1px solid #ccc;
 }
+
+@media (max-width: 480px) {
+    .players-grid {
+        gap: 1rem;
+        padding: 5rem 0.5rem 1rem 0.5rem;
+    }
+
+    .player-card {
+        max-width: 100%;
+    }
+}

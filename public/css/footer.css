@@ -1,7 +1,89 @@
 .site-footer {
     background-color: var(--primary);
     color: var(--light);
-    padding: 1.5rem 1rem;
+    padding: 2rem 1rem;
     text-align: center;
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Sección de enlaces y redes */
+.footer-links,
+.footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-links a,
+.footer-social a {
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover,
+.footer-social a:hover {
+    color: var(--secondary);
+}
+
+/* Iconos de redes sociales */
+.footer-social a img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
+}
+
+.footer-social a:hover img {
+    transform: scale(1.1);
+    filter: brightness(0) invert(0.7);
+}
+
+/* Texto inferior */
+.footer-copy {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 1.5rem 1rem;
+        gap: 0.75rem;
+    }
+
+    .footer-links,
+    .footer-social {
+        gap: 0.75rem;
+    }
+
+    .footer-social a img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-links {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-social {
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .footer-copy {
+        font-size: 0.75rem;
+    }
 }

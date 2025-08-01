@@ -9,14 +9,23 @@ body {
     flex-direction: column;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-a {
+h1,h2,h3,h4,h5,h6,p,a {
     margin: 0;
     padding: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ✅ Mejora mobile */
+@media (max-width: 480px) {
+    body {
+        font-size: 0.9rem;
+    }
 }

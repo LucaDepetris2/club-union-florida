@@ -67,4 +67,18 @@
     .contact-container {
         grid-template-columns: 1fr;
     }
+
+    .contact-info h2 {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-form {
+        padding: 1.2rem;
+    }
+
+    .contact-info p {
+        font-size: 0.9rem;
+    }
 }

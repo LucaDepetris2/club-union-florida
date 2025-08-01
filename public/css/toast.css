@@ -16,32 +16,25 @@
 
 .toast.success {
     background-color: var(--success);
-    /* o #28a745 */
 }
 
 .toast.error {
     background-color: var(--error);
-    /* o #dc3545 */
 }
 
 @keyframes toastInOut {
-    0% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
 
-    10% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    90% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(-10px);
+@media (max-width: 480px) {
+    .toast {
+        top: 4rem;
+        right: 0.5rem;
+        font-size: 0.85rem;
+        padding: 0.7rem 1rem;
+        max-width: 95vw;
     }
 }

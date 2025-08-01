@@ -29,6 +29,8 @@ function renderNewsCard(news, full = false) {
   const card = document.createElement('div');
   card.className = 'card';
 
+  if (full) card.classList.add('full');
+
   // Imagen
   if (news.image) {
     const img = document.createElement('img');
@@ -41,7 +43,6 @@ function renderNewsCard(news, full = false) {
   const content = document.createElement('div');
   content.className = 'card-content';
 
-  // ✅ Mostrar fecha si existe
   if (news.date) {
     const dateEl = document.createElement('p');
     dateEl.className = 'card-date';
@@ -65,15 +66,21 @@ function renderNewsCard(news, full = false) {
 
   if (!full) {
     const link = document.createElement('a');
-    link.href = `news.html?id=${news.id}`;
     link.textContent = 'Leer más';
     link.className = 'news-link';
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      card.classList.add('full');
+      desc.innerHTML = news.content;
+      link.remove(); // Ocultamos el link al expandir
+    });
     content.appendChild(link);
   }
 
   card.appendChild(content);
   return card;
 }
+
 
 
 document.addEventListener('DOMContentLoaded', loadNews);

@@ -36,10 +36,13 @@
 }
 
 .card-text {
-    font-size: 1rem;
-    color: #444;
-    text-align: left;
-    flex-grow: 1;
+    font-size: 1.05rem;            /* Un poquito más grande para lectura cómoda */
+    line-height: 1.8;              /* Aumenta el espacio entre líneas */
+    color: #333;                   /* Gris suave en lugar de negro puro */
+    text-align: justify;           /* Bloques alineados para aspecto editorial */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.2px;         /* Pequeño espacio entre letras */
 }
 
 .card-date {
@@ -74,4 +77,110 @@
     .card img {
         height: auto;
     }
+}
+
+@media screen and (max-width: 480px) {
+    .card-content {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+}
+
+
+.card {
+    display: flex;
+    max-width: 900px;
+    margin: 3rem auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    transition: transform 0.3s ease, max-height 0.5s ease;
+    flex-direction: row;
+    max-height: 300px; /* Altura inicial */
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card.full {
+    flex-direction: column;
+    max-height: 2000px; /* Permite expandirse */
+}
+
+.card.full img {
+    width: 100%;
+    height: auto;
+}
+
+.card img {
+    width: 40%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+}
+
+.card-content {
+    width: 60%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.5s ease;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+.card.full .card-content {
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(180deg, #fff 0%, #fafafa 100%); /* Fondo sutil */
+    border-top: 1px solid #eee;   /* Separación visual de la imagen */
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #444;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.card.full .card-text {
+    font-size: 1.15rem;            /* Un poco más grande en modo expandido */
+    line-height: 1.9;              /* Más aire para textos largos */
+    padding: 0 1.5rem 1rem 1.5rem; /* Márgenes laterales internos */
+}
+
+.card-date {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+}
+
+.card-content a {
+    align-self: flex-start;
+    margin-top: 1.2rem;
+    font-weight: bold;
+    color: var(--secondary);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.card-content a:hover {
+    text-decoration: underline;
 }
