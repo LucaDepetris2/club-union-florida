@@ -5,19 +5,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administración - Club Unión Florida</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
   <header>
 <nav class="navbar">
-  <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
-  <div class="nav-links">
+  <div class="nav-logo">
+    <a href="index.html">
+      <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
+    </a>
+  </div>
+
+  <div class="nav-center">
     <a href="index.html">Inicio</a>
+    <a href="history.html">Historia</a>
     <a href="news.html">Noticias</a>
-    <a href="players.html">Jugadoras</a>
-    <a href="admin.html">Administración</a>
+    <a href="players.html">Liga Nacional</a>
+    <a href="contact.html">Contacto</a>
+  </div>
+
+  <div class="nav-icons">
+    <a href="mailto:club@unionflorida.ar" target="_blank" aria-label="Mail">
+      <img src="img/mail.svg" alt="Mail" />
+    </a>
+    <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
+      <img src="img/instagram.svg" alt="Instagram" />
+    </a>
+    <a href="https://www.tiktok.com/@unionflorida" target="_blank" aria-label="TikTok">
+      <img src="img/tiktok.svg" alt="TikTok" />
+    </a>
   </div>
 </nav>
+
 
   </header>
   <div class="container" id="admin-container">
@@ -31,22 +50,19 @@
   <script src="admin.js"></script>
 
   <footer class="site-footer">
-  <div class="footer-content">
-    <p>© Club Unión Florida. Todos los derechos reservados.</p>
-    <a href="https://www.instagram.com/cuf_femenino/" target="_blank" class="footer-instagram" aria-label="Instagram Unión Florida">
-      <img src="img/instagram.svg" alt="Instagram">
-    </a>
-  </div>
-</footer>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.querySelector('.menu-toggle');
-    const links = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('show');
+    <div class="footer-content">
+      <p>© Club Unión Florida. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.querySelector('.menu-toggle');
+      const links = document.querySelector('.nav-links');
+      toggle.addEventListener('click', () => {
+        links.classList.toggle('show');
+      });
     });
-  });
-</script>
+  </script>
 
 
 </body>

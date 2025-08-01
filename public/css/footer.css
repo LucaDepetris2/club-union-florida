@@ -1,0 +1,7 @@
+.site-footer {
+    background-color: var(--primary);
+    color: var(--light);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    margin-top: auto;
+}

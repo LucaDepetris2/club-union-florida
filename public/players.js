@@ -49,3 +49,39 @@ function renderPlayerCard(parent, player, alwaysShowDescription) {
 document.addEventListener('DOMContentLoaded', loadPlayers);
 
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  let currentlyOpenCard = null;
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.player-card');
+    if (card) {
+      if (currentlyOpenCard && currentlyOpenCard !== card) {
+        currentlyOpenCard.classList.remove('active');
+        currentlyOpenCard.querySelector('.description').style.display = 'none';
+        currentlyOpenCard.querySelector('img').style.opacity = '1';
+      }
+
+      const desc = card.querySelector('.description');
+      const img = card.querySelector('img');
+
+      const isVisible = desc.style.display === 'block';
+      if (isVisible) {
+        desc.style.display = 'none';
+        img.style.opacity = '1';
+        currentlyOpenCard = null;
+      } else {
+        desc.style.display = 'block';
+        img.style.opacity = '0.3';
+        currentlyOpenCard = card;
+      }
+    } else if (currentlyOpenCard) {
+      currentlyOpenCard.querySelector('.description').style.display = 'none';
+      currentlyOpenCard.querySelector('img').style.opacity = '1';
+      currentlyOpenCard = null;
+    }
+  });
+});
+
+

@@ -1,0 +1,49 @@
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+    padding: 6rem 1rem 2rem 1rem;
+}
+
+.player-card {
+    width: 100%;
+    max-width: 320px;
+    background-color: white;
+    color: var(--text);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.player-card:hover {
+    transform: translateY(-6px);
+}
+
+.player-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: top;
+}
+
+.player-card .info {
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5rem;
+    background-color: var(--primary);
+    color: white;
+}
+
+.player-card .description {
+    display: none;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    background-color: #f0f0f0;
+    color: #111;
+    border-top: 1px solid #ccc;
+}

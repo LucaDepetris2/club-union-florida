@@ -41,6 +41,16 @@ function renderNewsCard(news, full = false) {
   const content = document.createElement('div');
   content.className = 'card-content';
 
+  // ✅ Mostrar fecha si existe
+  if (news.date) {
+    const dateEl = document.createElement('p');
+    dateEl.className = 'card-date';
+    dateEl.textContent = new Date(news.date).toLocaleDateString('es-AR', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+    content.appendChild(dateEl);
+  }
+
   const titleEl = document.createElement(full ? 'h2' : 'h3');
   titleEl.className = 'card-title';
   titleEl.textContent = news.title;
@@ -64,6 +74,7 @@ function renderNewsCard(news, full = false) {
   card.appendChild(content);
   return card;
 }
+
 
 document.addEventListener('DOMContentLoaded', loadNews);
 
