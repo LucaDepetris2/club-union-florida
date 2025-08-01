@@ -8,15 +8,13 @@ header {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Navbar base */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: nowrap;
-    max-width: 100%;
     padding: 0.75rem 2rem;
     background-color: var(--primary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Logo */
@@ -38,11 +36,9 @@ header {
     transform: scale(1.05);
 }
 
-/* Centro */
+/* Menú principal */
 .nav-center {
     display: flex;
-    justify-content: center;
-    flex: 1 1 auto;
     gap: 2rem;
 }
 
@@ -59,9 +55,8 @@ header {
     background-color: var(--secondary);
 }
 
-/* Íconos derecha */
+/* Íconos */
 .nav-icons {
-    flex: 0 0 auto;
     display: flex;
     gap: 1rem;
 }
@@ -78,49 +73,65 @@ header {
     filter: brightness(0) invert(0.7);
 }
 
-/* ✅ Responsive */
-@media (max-width: 1024px) {
-    .nav-center {
-        gap: 1rem;
-    }
+/* Botón hamburguesa */
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    color: var(--light);
+    cursor: pointer;
+    user-select: none;
 }
 
+/* -------------------- */
+/*   RESPONSIVE MENU    */
+/* -------------------- */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
-    }
-
-    .nav-logo img {
-        height: 50px;
+    .menu-toggle {
+        display: block;
     }
 
     .nav-center {
+        display: none; /* Oculto por defecto en mobile */
+        position: absolute;
+        top: 100%;
+        right: 0;
         flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
+        background-color: var(--primary);
+        width: 200px;
+        padding: 1rem 0;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .nav-center.show {
+        display: flex;
+    }
+
+    .nav-center a {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        text-align: left;
     }
 
     .nav-icons {
-        justify-content: center;
+        display: none; /* Opcional ocultar iconos en mobile */
     }
 }
 
 @media (max-width: 480px) {
     .nav-logo img {
-        height: 40px;
+        height: 45px;
     }
 
     .nav-center a {
         font-size: 0.9rem;
-        padding: 0.25rem 0.5rem;
     }
+}
 
-    .nav-icons a img {
-        width: 20px;
-        height: 20px;
-    }
+/* Animación */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 

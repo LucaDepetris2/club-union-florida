@@ -17,6 +17,9 @@
                 </a>
             </div>
 
+            <!-- Botón hamburguesa -->
+            <div class="menu-toggle">&#9776;</div>
+
             <div class="nav-center">
                 <a href="index.html">Inicio</a>
                 <a href="history.html">Historia</a>
@@ -37,8 +40,6 @@
                 </a>
             </div>
         </nav>
-
-
     </header>
 
     <main class="history-container">
@@ -107,9 +108,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const toggle = document.querySelector('.menu-toggle');
-            const links = document.querySelector('.nav-links');
+            const menu = document.querySelector('.nav-center');
+
             toggle.addEventListener('click', () => {
-                links.classList.toggle('show');
+                menu.classList.toggle('show');
+            });
+
+            // Opcional: cerrar el menú al hacer click en un link
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => menu.classList.remove('show'));
             });
         });
     </script>
