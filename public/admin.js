@@ -11,21 +11,26 @@ function showDashboard() {
   const newsTitle = document.createElement('h3');
   newsTitle.textContent = 'Gestionar Noticias';
   newsSection.appendChild(newsTitle);
+
   const newsForm = document.createElement('form');
   newsForm.innerHTML = `
-  <label>Título:<br><input type="text" id="news-title" required></label><br>
-  <label>Contenido:<br><textarea id="news-content" rows="4" required></textarea></label><br>
-  <label>Fecha:<br><input type="date" id="news-date" required></label><br>
-  <label>Imagen:<br><input type="file" id="news-image" accept="image/*"></label><br>
-  <button type="submit">Crear Noticia</button>
-`;
+    <label>Título:<br><input type="text" id="news-title" required></label><br>
+    <label>Copete:<br><input type="text" id="news-subtitle"></label><br>
+    <label>Contenido:<br><textarea id="news-content" rows="4" required></textarea></label><br>
+    <label>Fecha:<br><input type="date" id="news-date" required></label><br>
+    <label>Imagen:<br><input type="file" id="news-image" accept="image/*"></label><br>
+    <button type="submit">Crear Noticia</button>
+  `;
 
+  // Crear noticia
   newsForm.onsubmit = async e => {
     e.preventDefault();
     const title = document.getElementById('news-title').value;
+    const subtitle = document.getElementById('news-subtitle').value;
     const content = document.getElementById('news-content').value;
-    const date = document.getElementById('news-date').value; // ⬅️ Agregado acá
+    const date = document.getElementById('news-date').value;
     const imageInput = document.getElementById('news-image');
+
     let imageData = '';
     if (imageInput.files[0]) {
       imageData = await toBase64(imageInput.files[0]);
@@ -34,7 +39,7 @@ function showDashboard() {
     const res = await fetch('/api/news', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, content, image: imageData, date }) // ⬅️ Acá también
+      body: JSON.stringify({ title, subtitle, content, image: imageData, date })
     });
 
     if (res.ok) {
@@ -51,10 +56,12 @@ function showDashboard() {
   newsSection.appendChild(newsList);
   container.appendChild(newsSection);
 
+  // ---- Jugadoras ----
   const playerSection = document.createElement('section');
   const playerTitle = document.createElement('h3');
   playerTitle.textContent = 'Gestionar Jugadoras';
   playerSection.appendChild(playerTitle);
+
   const playerForm = document.createElement('form');
   playerForm.innerHTML = `
     <label>Nombre:<br><input type="text" id="player-name" required></label><br>
@@ -62,6 +69,7 @@ function showDashboard() {
     <label>Imagen:<br><input type="file" id="player-image" accept="image/*"></label><br>
     <button type="submit">Crear Jugadora</button>
   `;
+
   playerForm.onsubmit = async e => {
     e.preventDefault();
     const name = document.getElementById('player-name').value;
@@ -71,28 +79,34 @@ function showDashboard() {
     if (imageInput.files[0]) {
       imageData = await toBase64(imageInput.files[0]);
     }
+
     const res = await fetch('/api/players', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, bio, image: imageData })
     });
+
     if (res.ok) {
       showToast('Jugadora creada', 'success');
       loadPlayerList();
       playerForm.reset();
-      await loadPlayerList();
     } else {
       showToast('Error al crear jugadora', 'error');
     }
   };
+
   playerSection.appendChild(playerForm);
   const playerList = document.createElement('div');
   playerSection.appendChild(playerList);
   container.appendChild(playerSection);
 
+  // Carga inicial de listas
   loadNewsList();
   loadPlayerList();
 
+  // -----------------------
+  // Funciones de Noticias
+  // -----------------------
   async function loadNewsList() {
     const res = await fetch('/api/news');
     const data = await res.json();
@@ -105,6 +119,8 @@ function showDashboard() {
       div.innerHTML = `<strong>${item.title}</strong> <button data-id="${item.id}" class="edit">Editar</button> <button data-id="${item.id}" class="delete">Eliminar</button>`;
       newsList.appendChild(div);
     });
+
+    // Eliminar noticia
     newsList.querySelectorAll('.delete').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (confirm('¿Eliminar esta noticia?')) {
@@ -114,19 +130,25 @@ function showDashboard() {
         }
       });
     });
+
+    // Editar noticia
     newsList.querySelectorAll('.edit').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-id');
         const item = data.find(n => n.id == id);
+
         showEditModal({
           title: item.title,
+          subtitle: item.subtitle || '',
           content: item.content,
-          onSave: async (newTitle, newContent, newDate) => {
+          date: item.date,
+          onSave: async (newTitle, newSubtitle, newContent, newDate) => {
             const res = await fetch(`/api/news/${id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 title: newTitle,
+                subtitle: newSubtitle,
                 content: newContent,
                 image: item.image,
                 date: newDate || item.date
@@ -143,6 +165,9 @@ function showDashboard() {
     });
   }
 
+  // -----------------------
+  // Funciones de Jugadoras
+  // -----------------------
   async function loadPlayerList() {
     const res = await fetch('/api/players');
     const data = await res.json();
@@ -155,6 +180,8 @@ function showDashboard() {
       div.innerHTML = `<strong>${item.name}</strong> <button data-id="${item.id}" class="edit">Editar</button> <button data-id="${item.id}" class="delete">Eliminar</button>`;
       playerList.appendChild(div);
     });
+
+    // Eliminar jugadora
     playerList.querySelectorAll('.delete').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (confirm('¿Eliminar esta jugadora?')) {
@@ -164,6 +191,8 @@ function showDashboard() {
         }
       });
     });
+
+    // Editar jugadora
     playerList.querySelectorAll('.edit').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-id');
@@ -171,7 +200,7 @@ function showDashboard() {
         showEditModal({
           title: item.name,
           content: item.bio,
-          onSave: async (newName, newBio) => {
+          onSave: async (newName, _, newBio) => {
             const res = await fetch(`/api/players/${id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
@@ -188,6 +217,7 @@ function showDashboard() {
   }
 }
 
+// Utilidad para imágenes
 function toBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -197,6 +227,7 @@ function toBase64(file) {
   });
 }
 
+// Login simple
 document.getElementById('login-form').addEventListener('submit', e => {
   e.preventDefault();
   const pwd = document.getElementById('password').value;
@@ -208,6 +239,7 @@ document.getElementById('login-form').addEventListener('submit', e => {
   }
 });
 
+// Toast genérico
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
@@ -216,15 +248,18 @@ function showToast(message, type = 'info') {
   setTimeout(() => toast.remove(), 4000);
 }
 
-function showEditModal({ title = '', content = '', image = '', date = '', onSave }) {
+// Modal de edición de noticia/jugadora
+function showEditModal({ title = '', subtitle = '', content = '', image = '', date = '', onSave }) {
   const modal = document.createElement('div');
   modal.className = 'modal';
 
-  const html = `
+  modal.innerHTML = `
     <div class="modal-content">
       <h3>Editar</h3>
       <label>Título o Nombre:</label>
       <input type="text" id="modal-title" value="${title}">
+      <label>Copete (si es noticia):</label>
+      <input type="text" id="modal-subtitle" value="${subtitle}">
       <label>Contenido o Bio:</label>
       <textarea id="modal-content">${content}</textarea>
       <label>Fecha:</label>
@@ -234,45 +269,15 @@ function showEditModal({ title = '', content = '', image = '', date = '', onSave
     </div>
   `;
 
-  modal.innerHTML = html;
   document.body.appendChild(modal);
 
   modal.querySelector('#modal-cancel').onclick = () => modal.remove();
   modal.querySelector('#modal-save').onclick = () => {
     const newTitle = modal.querySelector('#modal-title').value;
+    const newSubtitle = modal.querySelector('#modal-subtitle').value;
     const newContent = modal.querySelector('#modal-content').value;
     const newDate = modal.querySelector('#modal-date').value;
-    onSave(newTitle, newContent, newDate);
+    onSave(newTitle, newSubtitle, newContent, newDate);
     modal.remove();
   };
-}
-
-
-
-function showConfirmModal(message, onConfirm) {
-  const modal = document.createElement('div');
-  modal.className = 'modal confirm-modal';
-  modal.innerHTML = `
-    <div class="modal-content">
-      <p>${message}</p>
-      <div class="btn-group">
-        <button id="confirm-yes">Sí</button>
-        <button id="confirm-no">Cancelar</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  modal.querySelector('#confirm-no').onclick = () => modal.remove();
-  modal.querySelector('#confirm-yes').onclick = () => {
-    onConfirm();
-    modal.remove();
-  };
-}
-
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 4000);
 }

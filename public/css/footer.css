@@ -1,49 +1,38 @@
 .site-footer {
     background-color: var(--primary);
     color: var(--light);
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem;
     text-align: center;
     margin-top: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
-/* Sección de enlaces y redes */
-.footer-links,
-.footer-social {
+/* Título */
+.footer-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Sponsors centrados */
+.footer-sponsors {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    gap: 2rem;         /* Más separación entre logos */
     justify-content: center;
     align-items: center;
 }
 
-.footer-links a,
-.footer-social a {
-    color: var(--light);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s;
-}
-
-.footer-links a:hover,
-.footer-social a:hover {
-    color: var(--secondary);
-}
-
-/* Iconos de redes sociales */
-.footer-social a img {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
+.footer-sponsors a img {
+    width: 80px;
+    height: auto;
     transition: transform 0.3s ease;
 }
 
-.footer-social a:hover img {
-    transform: scale(1.1);
-    filter: brightness(0) invert(0.7);
+.footer-sponsors a:hover img {
+    transform: scale(1.1); /* Animación hover */
 }
 
 /* Texto inferior */
@@ -56,34 +45,33 @@
 /* ✅ Responsive */
 @media (max-width: 768px) {
     .site-footer {
-        padding: 1.5rem 1rem;
-        gap: 0.75rem;
+        padding: 2rem 1rem;
+        gap: 1rem;
     }
 
-    .footer-links,
-    .footer-social {
-        gap: 0.75rem;
+    .footer-sponsors {
+        gap: 1.5rem;
     }
 
-    .footer-social a img {
-        width: 24px;
-        height: 24px;
+    .footer-sponsors a img {
+        width: 65px;
     }
 }
 
 @media (max-width: 480px) {
-    .footer-links {
-        flex-direction: column;
-        text-align: center;
+    .footer-sponsors {
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
-    .footer-social {
-        flex-direction: row;
-        justify-content: center;
-        gap: 0.5rem;
+    .footer-sponsors a img {
+        width: 50px;
     }
 
     .footer-copy {
         font-size: 0.75rem;
     }
 }
+
+
+

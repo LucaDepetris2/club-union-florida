@@ -26,7 +26,7 @@ async function loadPlayers() {
   data.forEach(item => renderPlayerCard(container, item, false));
 }
 
-function renderPlayerCard(parent, player, alwaysShowDescription) {
+function renderPlayerCard(parent, player) {
   const card = document.createElement('div');
   card.className = 'player-card';
 
@@ -37,7 +37,13 @@ function renderPlayerCard(parent, player, alwaysShowDescription) {
     card.appendChild(img);
   }
 
-  // Información (nombre)
+  // Overlay de biografía
+  const desc = document.createElement('div');
+  desc.className = 'description';
+  desc.textContent = player.bio || 'Sin biografía disponible';
+  card.appendChild(desc);
+
+  // Nombre
   const info = document.createElement('div');
   info.className = 'info';
   info.textContent = player.name;
@@ -48,9 +54,6 @@ function renderPlayerCard(parent, player, alwaysShowDescription) {
 
 document.addEventListener('DOMContentLoaded', loadPlayers);
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   let currentlyOpenCard = null;
 
@@ -59,26 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (card) {
       if (currentlyOpenCard && currentlyOpenCard !== card) {
         currentlyOpenCard.classList.remove('active');
-        currentlyOpenCard.querySelector('.description').style.display = 'none';
-        currentlyOpenCard.querySelector('img').style.opacity = '1';
+        currentlyOpenCard = null;
       }
 
-      const desc = card.querySelector('.description');
-      const img = card.querySelector('img');
-
-      const isVisible = desc.style.display === 'block';
-      if (isVisible) {
-        desc.style.display = 'none';
-        img.style.opacity = '1';
+      const isActive = card.classList.contains('active');
+      if (isActive) {
+        card.classList.remove('active');
         currentlyOpenCard = null;
       } else {
-        desc.style.display = 'block';
-        img.style.opacity = '0.3';
+        card.classList.add('active');
         currentlyOpenCard = card;
       }
     } else if (currentlyOpenCard) {
-      currentlyOpenCard.querySelector('.description').style.display = 'none';
-      currentlyOpenCard.querySelector('img').style.opacity = '1';
+      currentlyOpenCard.classList.remove('active');
       currentlyOpenCard = null;
     }
   });
