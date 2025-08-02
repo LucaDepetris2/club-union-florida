@@ -7,4 +7,6 @@
     --text: #111;
     --accent: #d90429;
     --background: #f4f6f8;
+    --success: #28a745; /* Verde Bootstrap */
+    --error: #dc3545;   /* Rojo Bootstrap */
 }
