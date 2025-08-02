@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = new FormData(form);
 
         try {
-            const res = await fetch("https://formspree.io/f/mwkgybpa", {
+            const res = await fetch("https://formspree.io/f/mvgqbrwe", {
                 method: "POST",
                 body: data,
                 headers: {
