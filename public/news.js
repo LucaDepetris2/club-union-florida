@@ -133,8 +133,9 @@ document.addEventListener('DOMContentLoaded', loadNews);
 
 function formatText(text) {
   return text
-    .replace(/\.\s/g, '.\n')
-    .split('\n')
+    .split(/\n+/) // separa por líneas (uno o más enters)
     .map(p => `<p>${p.trim()}</p>`)
     .join('');
 }
+
+
