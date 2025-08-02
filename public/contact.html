@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contacto - Club Unión Florida</title>
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/contact.css" />
 </head>
 
 <body>
@@ -16,10 +17,7 @@
                     <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
                 </a>
             </div>
-
-            <!-- Botón hamburguesa -->
             <div class="menu-toggle">&#9776;</div>
-
             <div class="nav-center">
                 <a href="index.html">Inicio</a>
                 <a href="history.html">Historia</a>
@@ -28,7 +26,6 @@
                 <a href="afmb.html">AFMB</a>
                 <a href="contact.html">Contacto</a>
             </div>
-
             <div class="nav-icons">
                 <a href="mailto:cuf.femenino@gmail.com" target="_blank" aria-label="Mail">
                     <img src="img/mail.svg" alt="Mail" />
@@ -46,18 +43,14 @@
     <main class="contact-container">
         <div class="contact-info">
             <h2>CONTACTO</h2>
-            <p>
-                Bernardo de Irigoyen 1540, B1602 Florida Oeste, Provincia de Buenos
-                Aires
-            </p>
+            <p>Bernardo de Irigoyen 1540, B1602 Florida Oeste, Provincia de Buenos Aires</p>
             <p>cuf.femenino@gmail.com</p>
             <iframe
                 src="https://www.google.com/maps?q=Bernardo+de+Irigoyen+1540,+Florida+Oeste,+Buenos+Aires&output=embed"
                 width="100%" height="200" style="border: 0; border-radius: 8px" allowfullscreen=""
                 loading="lazy"></iframe>
         </div>
-
-        <form class="contact-form">
+        <form class="contact-form" id="contact-form">
             <label>Nombre*
                 <input type="text" name="nombre" required />
             </label>
@@ -68,24 +61,17 @@
                 <textarea name="comentarios" rows="4"></textarea>
             </label>
             <button type="submit">Enviar</button>
+            <div id="form-message" style="display:none; font-weight:bold; margin-top:1rem;"></div>
         </form>
     </main>
 
     <footer class="site-footer">
         <p class="footer-title">Nuestros sponsors</p>
-
         <div class="footer-sponsors">
-            <a href="https://purobasquet.com" target="_blank">
-                <img src="img/sponsor1.png" alt="purobasquet">
-            </a>
-            <a href="https://recicladosterra.com" target="_blank">
-                <img src="img/sponsor2.png" alt="terra">
-            </a>
-            <a href="https://www.fleetsa.com.ar" target="_blank">
-                <img src="img/sponsor3.png" alt="fleetsa">
-            </a>
+            <a href="https://purobasquet.com" target="_blank"><img src="img/sponsor1.png" alt="purobasquet"></a>
+            <a href="https://recicladosterra.com" target="_blank"><img src="img/sponsor2.png" alt="terra"></a>
+            <a href="https://www.fleetsa.com.ar" target="_blank"><img src="img/sponsor3.png" alt="fleetsa"></a>
         </div>
-
         <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
     </footer>
     <script>
@@ -103,6 +89,7 @@
             });
         });
     </script>
+    <script src="js/contact.js"></script>
 </body>
 
 </html>
