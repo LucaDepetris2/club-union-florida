@@ -4,81 +4,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noticias - Club Unión Florida</title>
+  <title>Club Unión Florida</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="img/FAVICON CUF WEB.png" type="image/png">
 </head>
 
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-logo">
-                <a href="index.html">
-                    <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
-                </a>
-            </div>
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">
+        <a href="index.html">
+          <img src="img/logo.png" alt="Club Unión Florida" class="logo-img">
+        </a>
+      </div>
 
-            <!-- Botón hamburguesa -->
-            <div class="menu-toggle">&#9776;</div>
+      <!-- Botón hamburguesa -->
+      <div class="menu-toggle">&#9776;</div>
 
-            <div class="nav-center">
-                <a href="index.html">Inicio</a>
-                <a href="history.html">Historia</a>
-                <a href="news.html">Noticias</a>
-                <a href="players.html">Liga Nacional</a>
-                <a href="afmb.html">AFMB</a>
-                <a href="contact.html">Contacto</a>
-            </div>
+      <!-- Menú principal + íconos -->
+      <div class="nav-center">
+        <a href="index.html">Inicio</a>
+        <a href="history.html">Historia</a>
+        <a href="news.html">Noticias</a>
+        <a href="players.html">Liga Nacional</a>
+        <a href="afmb.html">AFMB</a>
+        <a href="contact.html">Contacto</a>
 
-            <div class="nav-icons">
-                <a href="mailto:cuf.femenino@gmail.com" target="_blank" aria-label="Mail">
-                    <img src="img/mail.svg" alt="Mail" />
-                </a>
-                <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
-                    <img src="img/instagram.svg" alt="Instagram" />
-                </a>
-                <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
-                    <img src="img/tiktok.svg" alt="TikTok" />
-                </a>
-            </div>
-        </nav>
-    </header>
-<div class="news-container" id="news-container">
+        <!-- Íconos deben estar dentro de nav-center -->
+        <div class="nav-icons">
+          <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
+            <img src="img/instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
+            <img src="img/tiktok.svg" alt="TikTok" />
+          </a>
+        </div>
+      </div>
+
+    </nav>
+  </header>
+  <div class="news-container" id="news-container">
     <p>Cargando noticias...</p>
   </div>
   <script src="news.js"></script>
 
-<footer class="site-footer">
-  <p class="footer-title">Nuestros sponsors</p>
+  <footer class="site-footer">
+    <p class="footer-title">Nuestros sponsors</p>
 
-  <div class="footer-sponsors">
-    <a href="https://purobasquet.com" target="_blank">
-      <img src="img/sponsor1.png" alt="purobasquet">
-    </a>
-    <a href="https://recicladosterra.com" target="_blank">
-      <img src="img/sponsor2.png" alt="terra">
-    </a>
-    <a href="https://www.fleetsa.com.ar" target="_blank">
-      <img src="img/sponsor3.png" alt="fleetsa">
-    </a>
-  </div>
+    <div class="footer-sponsors">
+      <a href="https://purobasquet.com" target="_blank">
+        <img src="img/sponsor1.png" alt="purobasquet">
+      </a>
+      <a href="https://recicladosterra.com" target="_blank">
+        <img src="img/sponsor2.png" alt="terra">
+      </a>
+      <a href="https://www.fleetsa.com.ar" target="_blank">
+        <img src="img/sponsor3.png" alt="fleetsa">
+      </a>
+    </div>
 
-  <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
-</footer>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('.nav-center');
+    <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.querySelector('.menu-toggle');
+      const menu = document.querySelector('.nav-center');
 
-  toggle.addEventListener('click', () => {
-    menu.classList.toggle('show');
-  });
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('show');
+      });
 
-  // Opcional: cerrar el menú al hacer click en un link
-  menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => menu.classList.remove('show'));
-  });
-});
-</script>
+      // Opcional: cerrar el menú al hacer click en un link
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => menu.classList.remove('show'));
+      });
+    });
+  </script>
 
 </body>
 

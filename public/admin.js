@@ -1,4 +1,4 @@
-const ADMIN_PASSWORD = 'admin123';
+const ADMIN_PASSWORD = 'todocuf';
 
 function showDashboard() {
   const container = document.getElementById('admin-container');
@@ -16,6 +16,7 @@ function showDashboard() {
   newsForm.innerHTML = `
     <label>Título:<br><input type="text" id="news-title" required></label><br>
     <label>Copete:<br><input type="text" id="news-subtitle"></label><br>
+    <label>Categoría:<br><input type="text" id="news-category"></label><br>
     <label>Contenido:<br><textarea id="news-content" rows="4" required></textarea></label><br>
     <label>Fecha:<br><input type="date" id="news-date" required></label><br>
     <label>Imagen:<br><input type="file" id="news-image" accept="image/*"></label><br>
@@ -28,6 +29,7 @@ function showDashboard() {
     const title = document.getElementById('news-title').value;
     const subtitle = document.getElementById('news-subtitle').value;
     const content = document.getElementById('news-content').value;
+    const category = document.getElementById('news-category').value;
     const date = document.getElementById('news-date').value;
     const imageInput = document.getElementById('news-image');
 
@@ -39,7 +41,7 @@ function showDashboard() {
     const res = await fetch('/api/news', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, subtitle, content, image: imageData, date })
+      body: JSON.stringify({ title, subtitle, content, image: imageData, date, category })
     });
 
     if (res.ok) {
@@ -142,7 +144,8 @@ function showDashboard() {
           subtitle: item.subtitle || '',
           content: item.content,
           date: item.date,
-          onSave: async (newTitle, newSubtitle, newContent, newDate) => {
+          category: item.category || '',
+          onSave: async (newTitle, newSubtitle, newContent, newDate, newCategory) => {
             const res = await fetch(`/api/news/${id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
@@ -151,7 +154,8 @@ function showDashboard() {
                 subtitle: newSubtitle,
                 content: newContent,
                 image: item.image,
-                date: newDate || item.date
+                date: newDate || item.date,
+                category: newCategory
               })
             });
 
@@ -249,7 +253,7 @@ function showToast(message, type = 'info') {
 }
 
 // Modal de edición de noticia/jugadora
-function showEditModal({ title = '', subtitle = '', content = '', image = '', date = '', onSave }) {
+function showEditModal({ title = '', subtitle = '', content = '', image = '', date = '', category = '', onSave }) {
   const modal = document.createElement('div');
   modal.className = 'modal';
 
@@ -262,6 +266,8 @@ function showEditModal({ title = '', subtitle = '', content = '', image = '', da
       <input type="text" id="modal-subtitle" value="${subtitle}">
       <label>Contenido o Bio:</label>
       <textarea id="modal-content">${content}</textarea>
+      <label>Categoría:</label>
+      <input type="text" id="modal-category" value="${category || ''}">
       <label>Fecha:</label>
       <input type="date" id="modal-date" value="${date || ''}">
       <button id="modal-save">Guardar</button>
@@ -276,8 +282,9 @@ function showEditModal({ title = '', subtitle = '', content = '', image = '', da
     const newTitle = modal.querySelector('#modal-title').value;
     const newSubtitle = modal.querySelector('#modal-subtitle').value;
     const newContent = modal.querySelector('#modal-content').value;
+    const newCategory = modal.querySelector('#modal-category').value;
     const newDate = modal.querySelector('#modal-date').value;
-    onSave(newTitle, newSubtitle, newContent, newDate);
+    onSave(newTitle, newSubtitle, newContent, newDate, newCategory);
     modal.remove();
   };
 }

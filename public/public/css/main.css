@@ -1,0 +1,14 @@
+@import url('./variables.css');
+@import url('./base.css');
+@import url('./layout.css');
+@import url('./navbar.css');
+@import url('./home.css');
+@import url('./news.css');
+@import url('./players.css');
+@import url('./admin.css');
+@import url('./history.css');
+@import url('./contact.css');
+@import url('./footer.css');
+@import url('./modal.css');
+@import url('./toast.css');
+@import url('./afmb.css');

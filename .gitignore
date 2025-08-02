@@ -1,0 +1,7 @@
+# Ignorar archivos y carpetas del backend
+db.json
+server.js
+.env
+*.log
+package-lock.json
+node_modules/

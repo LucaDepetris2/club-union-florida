@@ -40,7 +40,7 @@ function renderPlayerCard(parent, player) {
   // Overlay de biografía
   const desc = document.createElement('div');
   desc.className = 'description';
-  desc.textContent = player.bio || 'Sin biografía disponible';
+  desc.innerHTML = formatText(player.bio || 'Sin biografía disponible');
   card.appendChild(desc);
 
   // Nombre
@@ -51,6 +51,15 @@ function renderPlayerCard(parent, player) {
 
   parent.appendChild(card);
 }
+
+
+function formatText(text) {
+  return text
+    .replace(/\.\s/g, '.\n').split('\n')
+    .map(p => `<p>${p.trim()}</p>`)
+    .join('');
+}
+
 
 document.addEventListener('DOMContentLoaded', loadPlayers);
 

@@ -43,6 +43,13 @@ function renderNewsCard(news, full = false) {
   const content = document.createElement('div');
   content.className = 'news-card-content';
 
+  if (news.category) {
+    const cat = document.createElement('p');
+    cat.className = 'news-card-category';
+    cat.textContent = news.category;
+    content.appendChild(cat);
+  }
+
   const titleEl = document.createElement(full ? 'h2' : 'h3');
   titleEl.className = 'news-card-title';
   titleEl.textContent = news.title;
@@ -70,9 +77,9 @@ function renderNewsCard(news, full = false) {
 
   const desc = document.createElement('p');
   desc.className = 'news-card-text';
-  desc.innerHTML = full ? news.content : (
-    news.content.substring(0, 200) + (news.content.length > 200 ? '...' : '')
-  );
+  desc.innerHTML = full
+    ? formatText(news.content)
+    : formatText(news.content.substring(0, 200)) + (news.content.length > 200 ? '<span class="dots">...</span>' : '');
   content.appendChild(desc);
 
   const expandLink = document.createElement('a');
@@ -84,41 +91,35 @@ function renderNewsCard(news, full = false) {
   collapseLink.className = 'news-link';
   collapseLink.style.display = full ? 'inline-block' : 'none';
 
+  expandLink.addEventListener('click', e => {
+    e.preventDefault();
+    card.classList.add('full');
+    desc.innerHTML = formatText(news.content);
+    expandLink.remove();
+    collapseLink.style.display = 'inline-block';
+    if (img && card.contains(img)) {
+      card.removeChild(img);
+      content.insertBefore(img, content.querySelector('.news-card-date') || desc);
+    }
+  });
+
   collapseLink.addEventListener('click', e => {
     e.preventDefault();
     card.classList.remove('full');
-
-    desc.innerHTML = news.content.substring(0, 200) + (news.content.length > 200 ? '...' : '');
+    desc.innerHTML = formatText(news.content.substring(0, 200)) + (news.content.length > 200 ? '<span class="dots">...</span>' : '');
     collapseLink.style.display = 'none';
-
     if (img && content.contains(img)) {
       content.removeChild(img);
     }
-
     if (img && !card.contains(img)) {
       card.insertBefore(img, content);
     }
-
     if (!content.contains(expandLink)) {
       content.appendChild(expandLink);
     }
   });
 
-  if (!full) {
-    expandLink.addEventListener('click', e => {
-      e.preventDefault();
-      card.classList.add('full');
-      desc.innerHTML = news.content;
-      expandLink.remove();
-      collapseLink.style.display = 'inline-block';
-      if (img && card.contains(img)) {
-        card.removeChild(img);
-        content.insertBefore(img, content.querySelector('.news-card-date') || desc);
-      }
-    });
-    content.appendChild(expandLink);
-  }
-
+  if (!full) content.appendChild(expandLink);
   content.appendChild(collapseLink);
   if (!full && img) card.appendChild(img);
   card.appendChild(content);
@@ -128,3 +129,12 @@ function renderNewsCard(news, full = false) {
 
 document.addEventListener('DOMContentLoaded', loadNews);
 
+
+
+function formatText(text) {
+  return text
+    .replace(/\.\s/g, '.\n')
+    .split('\n')
+    .map(p => `<p>${p.trim()}</p>`)
+    .join('');
+}

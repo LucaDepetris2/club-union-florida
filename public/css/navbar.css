@@ -2,10 +2,16 @@ header {
     background-color: var(--primary);
     color: var(--light);
     width: 100%;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    padding-top: 80px;
+    /* Para evitar que el header tape el contenido */
 }
 
 /* Navbar base */
@@ -55,7 +61,7 @@ header {
     background-color: var(--secondary);
 }
 
-/* Íconos */
+/* Íconos dentro del menú */
 .nav-icons {
     display: flex;
     gap: 1rem;
@@ -90,22 +96,32 @@ header {
         display: block;
     }
 
+    .navbar {
+        flex-wrap: wrap;
+    }
+
     .nav-center {
-        display: none; /* Oculto por defecto en mobile */
+        display: none;
         position: absolute;
         top: 100%;
         right: 0;
         flex-direction: column;
         background-color: var(--primary);
-        width: 200px;
-        padding: 1rem 0;
+        width: 220px;
         border-radius: 0 0 8px 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         animation: fadeIn 0.3s ease;
+        overflow: visible;
+        padding-bottom: 0.5rem;
     }
 
     .nav-center.show {
         display: flex;
+    }
+
+    .nav-center.show .nav-icons {
+        display: flex;
+        /* 👈 Forzamos a mostrarlos solo cuando el menú está visible */
     }
 
     .nav-center a {
@@ -114,10 +130,24 @@ header {
         text-align: left;
     }
 
-    .nav-icons {
-        display: none; /* Opcional ocultar iconos en mobile */
+    .nav-center .nav-icons {
+        display: none;
+        /* 👈 Ocultos por defecto, hasta que se active el menú */
+        justify-content: center;
+        gap: 1.5rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 0.8rem 1rem 0;
+    }
+
+    /* Íconos fuera del menú: ocultos en mobile */
+    .navbar>.nav-icons {
+        display: none;
     }
 }
+
+
+
 
 @media (max-width: 480px) {
     .nav-logo img {
@@ -131,7 +161,13 @@ header {
 
 /* Animación */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

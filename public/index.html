@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Club Unión Florida</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="img/FAVICON CUF WEB.png" type="image/png">
 </head>
 
 <body>
@@ -20,29 +21,28 @@
       <!-- Botón hamburguesa -->
       <div class="menu-toggle">&#9776;</div>
 
-      <div class="nav-center">
-        <a href="index.html">Inicio</a>
-        <a href="history.html">Historia</a>
-        <a href="news.html">Noticias</a>
-        <a href="players.html">Liga Nacional</a>
-        <a href="afmb.html">AFMB</a>
-        <a href="contact.html">Contacto</a>
-      </div>
+      <!-- Menú principal + íconos -->
+<div class="nav-center">
+  <a href="index.html">Inicio</a>
+  <a href="history.html">Historia</a>
+  <a href="news.html">Noticias</a>
+  <a href="players.html">Liga Nacional</a>
+  <a href="afmb.html">AFMB</a>
+  <a href="contact.html">Contacto</a>
 
-      <div class="nav-icons">
-        <a href="mailto:cuf.femenino@gmail.com" target="_blank" aria-label="Mail">
-          <img src="img/mail.svg" alt="Mail" />
-        </a>
-        <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
-          <img src="img/instagram.svg" alt="Instagram" />
-        </a>
-        <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
-          <img src="img/tiktok.svg" alt="TikTok" />
-        </a>
-      </div>
+  <!-- Íconos deben estar dentro de nav-center -->
+  <div class="nav-icons">
+    <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
+      <img src="img/instagram.svg" alt="Instagram" />
+    </a>
+    <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
+      <img src="img/tiktok.svg" alt="TikTok" />
+    </a>
+  </div>
+</div>
+
     </nav>
   </header>
-
 
   <div class="container">
     <h2>Club Unión Florida Basquet Femenino</h2>
@@ -71,8 +71,6 @@
     <p class="footer-copy">© Club Unión Florida. Todos los derechos reservados.</p>
   </footer>
 
-
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const toggle = document.querySelector('.menu-toggle');
@@ -82,13 +80,12 @@
         menu.classList.toggle('show');
       });
 
-      // Opcional: cerrar el menú al hacer click en un link
+      // Cierra el menú al hacer clic en un link
       menu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => menu.classList.remove('show'));
       });
     });
   </script>
-
 
 </body>
 
