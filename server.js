@@ -29,15 +29,26 @@ const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
 app.post('/api/login', async (req, res) => {
   const { password } = req.body;
 
+  console.log('🔐 Contraseña ingresada:', JSON.stringify(password));
+  console.log('🧂 Hash cargado:', ADMIN_PASSWORD_HASH);
+
   if (!ADMIN_PASSWORD_HASH) {
+    console.error('❌ Hash no configurado');
     return res.status(500).json({ success: false, message: 'Hash no configurado' });
   }
 
-  const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-  if (match) {
-    return res.json({ success: true });
+  try {
+    const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+    console.log('✅ Coincide:', match);
+
+    if (match) {
+      return res.json({ success: true });
+    }
+    res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+  } catch (error) {
+    console.error('❌ Error al comparar hashes:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
-  res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
 });
 
 app.use('/api', middlewares, router);
@@ -52,6 +63,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 
 server.keepAliveTimeout = 120000;
 server.headersTimeout = 120000;
+
 
 
 
