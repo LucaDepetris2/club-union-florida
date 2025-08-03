@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const jsonServer = require('json-server');
-const bcrypt = require('bcryptjs');
 
 const app = express();
 const dbPath = '/persistent/db.json'; // Ruta al disco persistente
@@ -23,32 +22,17 @@ const PORT = process.env.PORT || 3000;
 // ✅ Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Hash directo de "todocuf" (válido y comprobado)
-const ADMIN_PASSWORD_HASH = '$2a$10$r5v3NhNE/j/JQm2HiUzx6.1k9mT8pNmjGVUVdUbbajMIxw8cQfRZa';
+// ✅ Leer contraseña desde variable de entorno
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'todocuf'; // fallback para testing local
 
-
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', (req, res) => {
   const { password } = req.body;
 
-  console.log('\n/////////////////////////////////////////////');
-  console.log('🔐 Contraseña ingresada:', JSON.stringify(password));
-  console.log('🧂 Hash embebido:', ADMIN_PASSWORD_HASH);
-
-  const expected = 'todocuf';
-  console.log('🔎 Igual texto plano?', password === expected);
-
-  try {
-    const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-    console.log('✅ Coincide con bcrypt:', match);
-
-    if (match) {
-      return res.json({ success: true });
-    }
-    res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
-  } catch (error) {
-    console.error('❌ Error al comparar hashes:', error);
-    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  if (password === ADMIN_PASSWORD) {
+    return res.json({ success: true });
   }
+
+  res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
 });
 
 app.use('/api', middlewares, router);
