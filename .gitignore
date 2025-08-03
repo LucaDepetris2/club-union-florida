@@ -4,4 +4,3 @@ server.js
 .env
 *.log
 package-lock.json
-node_modules/
