@@ -65,7 +65,7 @@
                 loading="lazy"></iframe>
         </div>
 
-        <form class="contact-form">
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/mvgqbrwe" method="POST">
             <label>Nombre*
                 <input type="text" name="nombre" required />
             </label>
@@ -76,7 +76,9 @@
                 <textarea name="comentarios" rows="4"></textarea>
             </label>
             <button type="submit">Enviar</button>
+            <div id="form-message" style="margin-top: 1rem;"></div>
         </form>
+
     </main>
 
     <footer class="site-footer">
@@ -111,6 +113,7 @@
             });
         });
     </script>
+    <script src="contact.js"></script>
 </body>
 
 </html>
