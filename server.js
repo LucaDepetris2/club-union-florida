@@ -20,6 +20,18 @@ const middlewares = jsonServer.defaults();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
+const bcrypt = require('bcryptjs');
+const ADMIN_PASSWORD_HASH = '$2a$10$UQm4qs2ReV5mYI.x5wpg2O8lGiPqiPeQpDE9RXqwOobS41LUOQ61C'; // hash de "todocuf"
+
+app.post('/api/login', async (req, res) => {
+  const { password } = req.body;
+  const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+  if (match) {
+    return res.json({ success: true });
+  }
+  res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+});
+
 app.use('/api', middlewares, router);
 
 app.get('*', (req, res) => {

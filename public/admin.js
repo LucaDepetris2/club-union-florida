@@ -1,4 +1,4 @@
-const ADMIN_PASSWORD = 'todocuf';
+
 
 function showDashboard() {
   const container = document.getElementById('admin-container');
@@ -232,16 +232,26 @@ function toBase64(file) {
 }
 
 // Login simple
-document.getElementById('login-form').addEventListener('submit', e => {
+document.getElementById('login-form').addEventListener('submit', async e => {
   e.preventDefault();
   const pwd = document.getElementById('password').value;
-  if (pwd === ADMIN_PASSWORD) {
+
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pwd })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
     showDashboard();
     showToast('Acceso concedido', 'success');
   } else {
     showToast('Contraseña incorrecta', 'error');
   }
 });
+
 
 // Toast genérico
 function showToast(message, type = 'info') {

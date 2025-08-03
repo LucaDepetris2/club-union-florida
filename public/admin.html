@@ -3,6 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="description"
+    content="Sitio oficial del Club Unión Florida de Básquet Femenino. Noticias, jugadoras, historia y contacto.">
+  <meta name="keywords"
+    content="básquet femenino, club unión florida, cuf femenino, liga nacional femenina, basquet argentina mujeres">
+  <meta name="author" content="Club Unión Florida">
+  <meta name="robots" content="index, follow">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administrador - Club Unión Florida</title>
   <link rel="stylesheet" href="css/main.css">
@@ -22,24 +29,24 @@
       <div class="menu-toggle">&#9776;</div>
 
       <!-- Menú principal + íconos -->
-<div class="nav-center">
-  <a href="index.html">Inicio</a>
-  <a href="history.html">Historia</a>
-  <a href="news.html">Noticias</a>
-  <a href="players.html">Liga Nacional</a>
-  <a href="afmb.html">AFMB</a>
-  <a href="contact.html">Contacto</a>
+      <div class="nav-center">
+        <a href="index.html">Inicio</a>
+        <a href="history.html">Historia</a>
+        <a href="news.html">Noticias</a>
+        <a href="players.html">Liga Nacional</a>
+        <a href="afmb.html">AFMB</a>
+        <a href="contact.html">Contacto</a>
 
-  <!-- Íconos deben estar dentro de nav-center -->
-  <div class="nav-icons">
-    <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
-      <img src="img/instagram.svg" alt="Instagram" />
-    </a>
-    <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
-      <img src="img/tiktok.svg" alt="TikTok" />
-    </a>
-  </div>
-</div>
+        <!-- Íconos deben estar dentro de nav-center -->
+        <div class="nav-icons">
+          <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
+            <img src="img/instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.tiktok.com/@cuf.femenino" target="_blank" aria-label="TikTok">
+            <img src="img/tiktok.svg" alt="TikTok" />
+          </a>
+        </div>
+      </div>
 
     </nav>
   </header>
@@ -53,38 +60,38 @@
   </div>
   <script src="admin.js"></script>
 
-<footer class="site-footer">
-  <p class="footer-title">Nuestros sponsors</p>
+  <footer class="site-footer">
+    <p class="footer-title">Nuestros sponsors</p>
 
-  <div class="footer-sponsors">
-    <a href="https://purobasquet.com" target="_blank">
-      <img src="img/sponsor1.png" alt="purobasquet">
-    </a>
-    <a href="https://recicladosterra.com" target="_blank">
-      <img src="img/sponsor2.png" alt="terra">
-    </a>
-    <a href="https://www.fleetsa.com.ar" target="_blank">
-      <img src="img/sponsor3.png" alt="fleetsa">
-    </a>
-  </div>
+    <div class="footer-sponsors">
+      <a href="https://purobasquet.com" target="_blank">
+        <img src="img/sponsor1.png" alt="purobasquet">
+      </a>
+      <a href="https://recicladosterra.com" target="_blank">
+        <img src="img/sponsor2.png" alt="terra">
+      </a>
+      <a href="https://www.fleetsa.com.ar" target="_blank">
+        <img src="img/sponsor3.png" alt="fleetsa">
+      </a>
+    </div>
 
-  <p class="footer-copy">Club Unión Florida © 2025. Todos los derechos reservados. Creado por Luca Depetris</p>
-</footer>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('.nav-center');
+    <p class="footer-copy">Club Unión Florida © 2025. Todos los derechos reservados. Creado por Luca Depetris</p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.querySelector('.menu-toggle');
+      const menu = document.querySelector('.nav-center');
 
-  toggle.addEventListener('click', () => {
-    menu.classList.toggle('show');
-  });
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('show');
+      });
 
-  // Opcional: cerrar el menú al hacer click en un link
-  menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => menu.classList.remove('show'));
-  });
-});
-</script>
+      // Opcional: cerrar el menú al hacer click en un link
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => menu.classList.remove('show'));
+      });
+    });
+  </script>
 
 
 </body>
