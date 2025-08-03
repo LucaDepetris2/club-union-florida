@@ -24,7 +24,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ Hash directo de "todocuf" (válido y comprobado)
-const ADMIN_PASSWORD_HASH = '$2a$10$9M/rGxGmZvjBJ9Ul6VGLKOlNHZ8O0DjdHi6HNSb7jcnJFGf.6bi/2';
+const ADMIN_PASSWORD_HASH = '$2a$10$r5v3NhNE/j/JQm2HiUzx6.1k9mT8pNmjGVUVdUbbajMIxw8cQfRZa';
+
 
 app.post('/api/login', async (req, res) => {
   const { password } = req.body;
