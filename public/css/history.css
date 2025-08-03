@@ -24,7 +24,8 @@
 .history-right .history-image {
     object-fit: cover;
     height: 100%;
-    max-height: 400px; /* forzamos un alto parejo */
+    max-height: 400px;
+    /* forzamos un alto parejo */
 }
 
 /* Para que contenedor también mantenga proporción */
@@ -123,5 +124,12 @@
     .tournament-logos img {
         height: 30px;
     }
-}
 
+    .tournament-list li {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        text-align: center;
+        margin-bottom: 0.6rem;
+    }
+
+}
