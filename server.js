@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const jsonServer = require('json-server');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 const dbPath = '/persistent/db.json'; // Ruta al disco persistente
@@ -19,12 +20,19 @@ const middlewares = jsonServer.defaults();
 
 const PORT = process.env.PORT || 3000;
 
+// ✅ Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
-const bcrypt = require('bcryptjs');
-const ADMIN_PASSWORD_HASH = '$2a$10$UQm4qs2ReV5mYI.x5wpg2O8lGiPqiPeQpDE9RXqwOobS41LUOQ61C'; // hash de "todocuf"
+
+// ✅ Leer hash desde variable de entorno
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
 
 app.post('/api/login', async (req, res) => {
   const { password } = req.body;
+
+  if (!ADMIN_PASSWORD_HASH) {
+    return res.status(500).json({ success: false, message: 'Hash no configurado' });
+  }
+
   const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
   if (match) {
     return res.json({ success: true });
