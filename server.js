@@ -23,23 +23,22 @@ const PORT = process.env.PORT || 3000;
 // ✅ Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Leer hash desde variable de entorno
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+// ✅ Hash directo de "todocuf" (válido y comprobado)
+const ADMIN_PASSWORD_HASH = '$2a$10$9M/rGxGmZvjBJ9Ul6VGLKOlNHZ8O0DjdHi6HNSb7jcnJFGf.6bi/2';
 
 app.post('/api/login', async (req, res) => {
   const { password } = req.body;
 
+  console.log('\n/////////////////////////////////////////////');
   console.log('🔐 Contraseña ingresada:', JSON.stringify(password));
-  console.log('🧂 Hash cargado:', ADMIN_PASSWORD_HASH);
+  console.log('🧂 Hash embebido:', ADMIN_PASSWORD_HASH);
 
-  if (!ADMIN_PASSWORD_HASH) {
-    console.error('❌ Hash no configurado');
-    return res.status(500).json({ success: false, message: 'Hash no configurado' });
-  }
+  const expected = 'todocuf';
+  console.log('🔎 Igual texto plano?', password === expected);
 
   try {
     const match = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-    console.log('✅ Coincide:', match);
+    console.log('✅ Coincide con bcrypt:', match);
 
     if (match) {
       return res.json({ success: true });
