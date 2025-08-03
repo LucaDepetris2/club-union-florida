@@ -24,9 +24,9 @@
 
 .afmb-card img {
     width: 100%;
-    height: auto;
-    display: block;
+    aspect-ratio: 4 / 3; /* Relación uniforme para todas las imágenes */
     object-fit: cover;
+    display: block;
 }
 
 .afmb-card span {
