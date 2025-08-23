@@ -21,28 +21,24 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       connectSrc: ["'self'", "https://api.cloudinary.com", "https://formspree.io"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      // si mantenés algún script inline del menú, deja 'unsafe-inline'; si no, quítalo
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-
-      // 👉 permitir iframes de Google Maps
       frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
       childSrc: ["'self'", "https://www.google.com", "https://maps.google.com"]
     }
   }
 }));
 
-
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ------- (opcional) Cloudinary si hay credencial -------
+// ------- Cloudinary opcional si hay credencial (backend firmado) -------
 let cloudinary = null;
 if (process.env.CLOUDINARY_URL) {
   cloudinary = require('cloudinary').v2;
-  cloudinary.config({ secure: true }); // toma CLOUDINARY_URL del .env
+  cloudinary.config({ secure: true });
 }
 async function maybeUploadToCloudinary(base64) {
   if (!cloudinary || !base64 || !base64.startsWith('data:')) return base64;
@@ -53,7 +49,7 @@ async function maybeUploadToCloudinary(base64) {
   });
   return res.secure_url;
 }
-// -------------------------------------------------------
+// ----------------------------------------------------------------------
 
 // Rate limit básico a /api
 app.use('/api', rateLimit({ windowMs: 60_000, max: 300 }));
@@ -144,7 +140,19 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Conectar DB y levantar
-mongoose.connect(process.env.MONGODB_URI)
+// --------- Guardas de entorno + conexión Mongo ---------
+function must(k) {
+  const v = process.env[k];
+  if (!v) {
+    console.error(`FATAL: falta ${k}. Presentes:`,
+      Object.keys(process.env).filter(x => x.includes('MONGO') || x === 'PORT'));
+    process.exit(1);
+  }
+  return v;
+}
+
+const MONGODB_URI = must('MONGODB_URI');
+
+mongoose.connect(MONGODB_URI)
   .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Servidor ON http://0.0.0.0:${PORT}`)))
   .catch(err => { console.error('Error MongoDB:', err); process.exit(1); });

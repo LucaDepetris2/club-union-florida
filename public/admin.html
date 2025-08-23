@@ -9,7 +9,6 @@
     content="básquet femenino, club unión florida, cuf femenino, liga nacional femenina, basquet argentina mujeres">
   <meta name="author" content="Club Unión Florida">
   <meta name="robots" content="index, follow">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administrador - Club Unión Florida</title>
   <link rel="stylesheet" href="css/main.css">
@@ -25,10 +24,8 @@
         </a>
       </div>
 
-      <!-- Botón hamburguesa -->
       <div class="menu-toggle">&#9776;</div>
 
-      <!-- Menú principal + íconos -->
       <div class="nav-center">
         <a href="index.html">Inicio</a>
         <a href="history.html">Historia</a>
@@ -37,7 +34,6 @@
         <a href="afmb.html">AFMB</a>
         <a href="contact.html">Contacto</a>
 
-        <!-- Íconos deben estar dentro de nav-center -->
         <div class="nav-icons">
           <a href="https://www.instagram.com/cuf_femenino/" target="_blank" aria-label="Instagram">
             <img src="img/instagram.svg" alt="Instagram" />
@@ -47,9 +43,9 @@
           </a>
         </div>
       </div>
-
     </nav>
   </header>
+
   <div class="container" id="admin-container">
     <h2>Iniciar Sesión</h2>
     <form id="login-form">
@@ -59,32 +55,24 @@
     </form>
   </div>
 
-
   <footer class="site-footer">
     <p class="footer-title">Nuestros sponsors</p>
-
     <div class="footer-sponsors">
-      <a href="https://purobasquet.com" target="_blank">
-        <img src="img/sponsor1.png" alt="purobasquet">
-      </a>
-      <a href="https://recicladosterra.com" target="_blank">
-        <img src="img/sponsor2.png" alt="terra">
-      </a>
-      <a href="https://www.fleetsa.com.ar" target="_blank">
-        <img src="img/sponsor3.png" alt="fleetsa">
-      </a>
+      <a href="https://purobasquet.com" target="_blank"><img src="img/sponsor1.png" alt="purobasquet"></a>
+      <a href="https://recicladosterra.com" target="_blank"><img src="img/sponsor2.png" alt="terra"></a>
+      <a href="https://www.fleetsa.com.ar" target="_blank"><img src="img/sponsor3.png" alt="fleetsa"></a>
     </div>
-
     <p class="footer-copy">Club Unión Florida © 2025. Desarrollado por Brava Estudio</p>
   </footer>
+
+  <!-- ⚠️ Cloudinary: usar valores reales (públicos) -->
   <script>
-    window.CLOUD_NAME = 'tu_cloud_name';
+    window.CLOUD_NAME = 'dznbw2nma';
     window.UPLOAD_PRESET = 'cuf_unsigned';
   </script>
-  <script src="admin.js"></script>
-  <script src="menu.js"></script>
 
-
+  <script src="admin.js" defer></script>
+  <script src="menu.js" defer></script>
 </body>
 
 </html>

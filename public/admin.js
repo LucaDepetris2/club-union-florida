@@ -3,18 +3,21 @@
 const CLOUD_NAME = window.CLOUD_NAME || 'dznbw2nma';
 const UPLOAD_PRESET = window.UPLOAD_PRESET || 'cuf_unsigned';
 
-// Sube file a Cloudinary (unsigned). Devuelve URL segura.
+// Sube archivo a Cloudinary (unsigned). Devuelve secure_url.
 async function uploadToCloudinary(file) {
   const fd = new FormData();
   fd.append('file', file);
   fd.append('upload_preset', UPLOAD_PRESET);
 
-  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-    method: 'POST',
-    body: fd
-  });
-  if (!r.ok) throw new Error('Error al subir imagen');
+  const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+  const r = await fetch(url, { method: 'POST', body: fd });
+
+  if (!r.ok) {
+    const txt = await r.text().catch(() => '');
+    throw new Error(`Cloudinary ${r.status}: ${txt || 'Error al subir imagen'}`);
+  }
   const data = await r.json();
+  if (!data.secure_url) throw new Error('Cloudinary: respuesta sin secure_url');
   return data.secure_url;
 }
 
@@ -47,27 +50,29 @@ function showDashboard() {
 
   newsForm.onsubmit = async (e) => {
     e.preventDefault();
-    const title = document.getElementById('news-title').value;
-    const subtitle = document.getElementById('news-subtitle').value;
-    const category = document.getElementById('news-category').value;
-    const content = document.getElementById('news-content').value;
+    const title = document.getElementById('news-title').value.trim();
+    const subtitle = document.getElementById('news-subtitle').value.trim();
+    const category = document.getElementById('news-category').value.trim();
+    const content = document.getElementById('news-content').value.trim();
     const date = document.getElementById('news-date').value;
     const imageFile = document.getElementById('news-image').files[0];
 
-    let image = '';
-    if (imageFile) image = await uploadToCloudinary(imageFile);
+    try {
+      let image = '';
+      if (imageFile) image = await uploadToCloudinary(imageFile);
 
-    const res = await fetch('/api/news', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, subtitle, content, image, date, category })
-    });
+      const res = await fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, subtitle, content, image, date, category })
+      });
 
-    if (res.ok) {
+      if (!res.ok) throw new Error(await res.text());
       showToast('Noticia creada', 'success');
       newsForm.reset();
       loadNewsList();
-    } else {
+    } catch (err) {
+      console.error(err);
       showToast('Error al crear noticia', 'error');
     }
   };
@@ -113,12 +118,8 @@ function showDashboard() {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                title: newTitle,
-                subtitle: newSubtitle,
-                content: newContent,
-                image: item.image,
-                date: newDate || item.date,
-                category: newCategory
+                title: newTitle, subtitle: newSubtitle, content: newContent,
+                image: item.image, date: newDate || item.date, category: newCategory
               })
             });
             if (res.ok) {
@@ -150,24 +151,26 @@ function showDashboard() {
 
   playerForm.onsubmit = async (e) => {
     e.preventDefault();
-    const name = document.getElementById('player-name').value;
-    const bio = document.getElementById('player-bio').value;
+    const name = document.getElementById('player-name').value.trim();
+    const bio = document.getElementById('player-bio').value.trim();
     const imageFile = document.getElementById('player-image').files[0];
 
-    let image = '';
-    if (imageFile) image = await uploadToCloudinary(imageFile);
+    try {
+      let image = '';
+      if (imageFile) image = await uploadToCloudinary(imageFile);
 
-    const res = await fetch('/api/players', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, bio, image })
-    });
+      const res = await fetch('/api/players', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, bio, image })
+      });
 
-    if (res.ok) {
+      if (!res.ok) throw new Error(await res.text());
       showToast('Jugadora creada', 'success');
       playerForm.reset();
       loadPlayerList();
-    } else {
+    } catch (err) {
+      console.error(err);
       showToast('Error al crear jugadora', 'error');
     }
   };
@@ -221,7 +224,7 @@ function showDashboard() {
     });
   }
 
-  // arranques
+  // arranque
   loadNewsList();
   loadPlayerList();
 }
@@ -287,3 +290,4 @@ function showEditModal({ title = '', subtitle = '', content = '', image = '', da
     modal.remove();
   };
 }
+
