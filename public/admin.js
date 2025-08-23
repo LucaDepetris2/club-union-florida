@@ -1,4 +1,22 @@
+// public/admin.js
 
+const CLOUD_NAME = window.CLOUD_NAME || 'dznbw2nma';
+const UPLOAD_PRESET = window.UPLOAD_PRESET || 'cuf_unsigned';
+
+// Sube file a Cloudinary (unsigned). Devuelve URL segura.
+async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', UPLOAD_PRESET);
+
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: fd
+  });
+  if (!r.ok) throw new Error('Error al subir imagen');
+  const data = await r.json();
+  return data.secure_url;
+}
 
 function showDashboard() {
   const container = document.getElementById('admin-container');
@@ -7,108 +25,53 @@ function showDashboard() {
   title.textContent = 'Panel de Administración';
   container.appendChild(title);
 
+  // ---------- Noticias ----------
   const newsSection = document.createElement('section');
-  const newsTitle = document.createElement('h3');
-  newsTitle.textContent = 'Gestionar Noticias';
-  newsSection.appendChild(newsTitle);
-
-  const newsForm = document.createElement('form');
-  newsForm.innerHTML = `
-    <label>Título:<br><input type="text" id="news-title" required></label><br>
-    <label>Copete:<br><input type="text" id="news-subtitle"></label><br>
-    <label>Categoría:<br><input type="text" id="news-category"></label><br>
-    <label>Contenido:<br><textarea id="news-content" rows="4" required></textarea></label><br>
-    <label>Fecha:<br><input type="date" id="news-date" required></label><br>
-    <label>Imagen:<br><input type="file" id="news-image" accept="image/*"></label><br>
-    <button type="submit">Crear Noticia</button>
+  newsSection.innerHTML = `
+    <h3>Gestionar Noticias</h3>
+    <form id="news-form">
+      <label>Título:<br><input type="text" id="news-title" required></label><br>
+      <label>Copete:<br><input type="text" id="news-subtitle"></label><br>
+      <label>Categoría:<br><input type="text" id="news-category"></label><br>
+      <label>Contenido:<br><textarea id="news-content" rows="4" required></textarea></label><br>
+      <label>Fecha:<br><input type="date" id="news-date" required></label><br>
+      <label>Imagen:<br><input type="file" id="news-image" accept="image/*"></label><br>
+      <button type="submit">Crear Noticia</button>
+    </form>
+    <div id="news-list"></div>
   `;
+  container.appendChild(newsSection);
 
-  // Crear noticia
-  newsForm.onsubmit = async e => {
+  const newsForm = newsSection.querySelector('#news-form');
+  const newsList = newsSection.querySelector('#news-list');
+
+  newsForm.onsubmit = async (e) => {
     e.preventDefault();
     const title = document.getElementById('news-title').value;
     const subtitle = document.getElementById('news-subtitle').value;
-    const content = document.getElementById('news-content').value;
     const category = document.getElementById('news-category').value;
+    const content = document.getElementById('news-content').value;
     const date = document.getElementById('news-date').value;
-    const imageInput = document.getElementById('news-image');
+    const imageFile = document.getElementById('news-image').files[0];
 
-    let imageData = '';
-    if (imageInput.files[0]) {
-      imageData = await toBase64(imageInput.files[0]);
-    }
+    let image = '';
+    if (imageFile) image = await uploadToCloudinary(imageFile);
 
     const res = await fetch('/api/news', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, subtitle, content, image: imageData, date, category })
+      body: JSON.stringify({ title, subtitle, content, image, date, category })
     });
 
     if (res.ok) {
       showToast('Noticia creada', 'success');
-      loadNewsList();
       newsForm.reset();
+      loadNewsList();
     } else {
       showToast('Error al crear noticia', 'error');
     }
   };
 
-  newsSection.appendChild(newsForm);
-  const newsList = document.createElement('div');
-  newsSection.appendChild(newsList);
-  container.appendChild(newsSection);
-
-  // ---- Jugadoras ----
-  const playerSection = document.createElement('section');
-  const playerTitle = document.createElement('h3');
-  playerTitle.textContent = 'Gestionar Jugadoras';
-  playerSection.appendChild(playerTitle);
-
-  const playerForm = document.createElement('form');
-  playerForm.innerHTML = `
-    <label>Nombre:<br><input type="text" id="player-name" required></label><br>
-    <label>Biografía:<br><textarea id="player-bio" rows="3" required></textarea></label><br>
-    <label>Imagen:<br><input type="file" id="player-image" accept="image/*"></label><br>
-    <button type="submit">Crear Jugadora</button>
-  `;
-
-  playerForm.onsubmit = async e => {
-    e.preventDefault();
-    const name = document.getElementById('player-name').value;
-    const bio = document.getElementById('player-bio').value;
-    const imageInput = document.getElementById('player-image');
-    let imageData = '';
-    if (imageInput.files[0]) {
-      imageData = await toBase64(imageInput.files[0]);
-    }
-
-    const res = await fetch('/api/players', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, bio, image: imageData })
-    });
-
-    if (res.ok) {
-      showToast('Jugadora creada', 'success');
-      loadPlayerList();
-      playerForm.reset();
-    } else {
-      showToast('Error al crear jugadora', 'error');
-    }
-  };
-
-  playerSection.appendChild(playerForm);
-  const playerList = document.createElement('div');
-  playerSection.appendChild(playerList);
-  container.appendChild(playerSection);
-
-  // Carga inicial de listas
-  loadNewsList();
-  loadPlayerList();
-
-  // -----------------------
-  // Funciones de Noticias
-  // -----------------------
   async function loadNewsList() {
     const res = await fetch('/api/news');
     const data = await res.json();
@@ -116,35 +79,35 @@ function showDashboard() {
     data.forEach(item => {
       const div = document.createElement('div');
       div.style.border = '1px solid #ccc';
-      div.style.padding = '0.5rem';
-      div.style.marginBottom = '0.5rem';
-      div.innerHTML = `<strong>${item.title}</strong> <button data-id="${item.id}" class="edit">Editar</button> <button data-id="${item.id}" class="delete">Eliminar</button>`;
+      div.style.padding = '6px';
+      div.style.marginBottom = '6px';
+      div.innerHTML = `
+        <strong>${item.title}</strong>
+        <button data-id="${item.id}" class="edit">Editar</button>
+        <button data-id="${item.id}" class="delete">Eliminar</button>
+      `;
       newsList.appendChild(div);
     });
 
-    // Eliminar noticia
     newsList.querySelectorAll('.delete').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if (confirm('¿Eliminar esta noticia?')) {
-          await fetch(`/api/news/${btn.getAttribute('data-id')}`, { method: 'DELETE' });
-          loadNewsList();
-          showToast('Noticia eliminada', 'success');
-        }
-      });
+      btn.onclick = async () => {
+        if (!confirm('¿Eliminar esta noticia?')) return;
+        await fetch(`/api/news/${btn.dataset.id}`, { method: 'DELETE' });
+        showToast('Noticia eliminada', 'success');
+        loadNewsList();
+      };
     });
 
-    // Editar noticia
     newsList.querySelectorAll('.edit').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-id');
+      btn.onclick = async () => {
+        const id = btn.dataset.id;
         const item = data.find(n => n.id == id);
-
         showEditModal({
           title: item.title,
           subtitle: item.subtitle || '',
           content: item.content,
-          date: item.date,
           category: item.category || '',
+          date: item.date || '',
           onSave: async (newTitle, newSubtitle, newContent, newDate, newCategory) => {
             const res = await fetch(`/api/news/${id}`, {
               method: 'PUT',
@@ -158,20 +121,57 @@ function showDashboard() {
                 category: newCategory
               })
             });
-
             if (res.ok) {
               showToast('Noticia actualizada', 'success');
               loadNewsList();
             }
           }
         });
-      });
+      };
     });
   }
 
-  // -----------------------
-  // Funciones de Jugadoras
-  // -----------------------
+  // ---------- Jugadoras ----------
+  const playerSection = document.createElement('section');
+  playerSection.innerHTML = `
+    <h3>Gestionar Jugadoras</h3>
+    <form id="player-form">
+      <label>Nombre:<br><input type="text" id="player-name" required></label><br>
+      <label>Biografía:<br><textarea id="player-bio" rows="3" required></textarea></label><br>
+      <label>Imagen:<br><input type="file" id="player-image" accept="image/*"></label><br>
+      <button type="submit">Crear Jugadora</button>
+    </form>
+    <div id="player-list"></div>
+  `;
+  container.appendChild(playerSection);
+
+  const playerForm = playerSection.querySelector('#player-form');
+  const playerList = playerSection.querySelector('#player-list');
+
+  playerForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('player-name').value;
+    const bio = document.getElementById('player-bio').value;
+    const imageFile = document.getElementById('player-image').files[0];
+
+    let image = '';
+    if (imageFile) image = await uploadToCloudinary(imageFile);
+
+    const res = await fetch('/api/players', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, bio, image })
+    });
+
+    if (res.ok) {
+      showToast('Jugadora creada', 'success');
+      playerForm.reset();
+      loadPlayerList();
+    } else {
+      showToast('Error al crear jugadora', 'error');
+    }
+  };
+
   async function loadPlayerList() {
     const res = await fetch('/api/players');
     const data = await res.json();
@@ -179,32 +179,33 @@ function showDashboard() {
     data.forEach(item => {
       const div = document.createElement('div');
       div.style.border = '1px solid #ccc';
-      div.style.padding = '0.5rem';
-      div.style.marginBottom = '0.5rem';
-      div.innerHTML = `<strong>${item.name}</strong> <button data-id="${item.id}" class="edit">Editar</button> <button data-id="${item.id}" class="delete">Eliminar</button>`;
+      div.style.padding = '6px';
+      div.style.marginBottom = '6px';
+      div.innerHTML = `
+        <strong>${item.name}</strong>
+        <button data-id="${item.id}" class="edit">Editar</button>
+        <button data-id="${item.id}" class="delete">Eliminar</button>
+      `;
       playerList.appendChild(div);
     });
 
-    // Eliminar jugadora
     playerList.querySelectorAll('.delete').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if (confirm('¿Eliminar esta jugadora?')) {
-          await fetch(`/api/players/${btn.getAttribute('data-id')}`, { method: 'DELETE' });
-          loadPlayerList();
-          showToast('Jugadora eliminada', 'success');
-        }
-      });
+      btn.onclick = async () => {
+        if (!confirm('¿Eliminar esta jugadora?')) return;
+        await fetch(`/api/players/${btn.dataset.id}`, { method: 'DELETE' });
+        showToast('Jugadora eliminada', 'success');
+        loadPlayerList();
+      };
     });
 
-    // Editar jugadora
     playerList.querySelectorAll('.edit').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-id');
+      btn.onclick = async () => {
+        const id = btn.dataset.id;
         const item = data.find(p => p.id == id);
         showEditModal({
           title: item.name,
           content: item.bio,
-          onSave: async (newName, _, newBio) => {
+          onSave: async (newName, _subtitle, newBio) => {
             const res = await fetch(`/api/players/${id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
@@ -216,19 +217,13 @@ function showDashboard() {
             }
           }
         });
-      });
+      };
     });
   }
-}
 
-// Utilidad para imágenes
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-    reader.readAsDataURL(file);
-  });
+  // arranques
+  loadNewsList();
+  loadPlayerList();
 }
 
 // Login simple
@@ -243,7 +238,6 @@ document.getElementById('login-form').addEventListener('submit', async e => {
   });
 
   const data = await res.json();
-
   if (data.success) {
     showDashboard();
     showToast('Acceso concedido', 'success');
@@ -252,8 +246,7 @@ document.getElementById('login-form').addEventListener('submit', async e => {
   }
 });
 
-
-// Toast genérico
+// utilidades UI
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
@@ -262,11 +255,9 @@ function showToast(message, type = 'info') {
   setTimeout(() => toast.remove(), 4000);
 }
 
-// Modal de edición de noticia/jugadora
 function showEditModal({ title = '', subtitle = '', content = '', image = '', date = '', category = '', onSave }) {
   const modal = document.createElement('div');
   modal.className = 'modal';
-
   modal.innerHTML = `
     <div class="modal-content">
       <h3>Editar</h3>
@@ -284,9 +275,7 @@ function showEditModal({ title = '', subtitle = '', content = '', image = '', da
       <button id="modal-cancel">Cancelar</button>
     </div>
   `;
-
   document.body.appendChild(modal);
-
   modal.querySelector('#modal-cancel').onclick = () => modal.remove();
   modal.querySelector('#modal-save').onclick = () => {
     const newTitle = modal.querySelector('#modal-title').value;
