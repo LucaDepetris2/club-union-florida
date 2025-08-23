@@ -14,25 +14,24 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'todocuf';
 
 app.use(helmet({
-  crossOriginEmbedderPolicy: false, // p/ evitar líos con fetch/imagenes
+  crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
       defaultSrc: ["'self'"],
-      // permitir fetch/POST a Cloudinary y Formspree
       connectSrc: ["'self'", "https://api.cloudinary.com", "https://formspree.io"],
-      // permitir cargar imágenes desde Cloudinary + data: (previews)
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      // si tenés CSS inline (algunos estilos), habilitalo:
+      // si mantenés algún script inline del menú, deja 'unsafe-inline'; si no, quítalo
+      scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      // scripts locales
-      scriptSrc: ["'self'"],
-      // opcional: si algún video o font externo
-      // fontSrc: ["'self'", "data:"],
-      // mediaSrc: ["'self'"]
+
+      // 👉 permitir iframes de Google Maps
+      frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
+      childSrc: ["'self'", "https://www.google.com", "https://maps.google.com"]
     }
   }
 }));
+
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));

@@ -1,3 +1,1 @@
-# Ignorar archivos y carpetas del backend
-db.json
-*.log
+.env

@@ -58,11 +58,6 @@
       <button type="submit">Ingresar</button>
     </form>
   </div>
-  <script>
-    window.CLOUD_NAME = 'tu_cloud_name';
-    window.UPLOAD_PRESET = 'cuf_unsigned';
-  </script>
-  <script src="admin.js"></script>
 
 
   <footer class="site-footer">
@@ -83,20 +78,11 @@
     <p class="footer-copy">Club Unión Florida © 2025. Desarrollado por Brava Estudio</p>
   </footer>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const toggle = document.querySelector('.menu-toggle');
-      const menu = document.querySelector('.nav-center');
-
-      toggle.addEventListener('click', () => {
-        menu.classList.toggle('show');
-      });
-
-      // Opcional: cerrar el menú al hacer click en un link
-      menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => menu.classList.remove('show'));
-      });
-    });
+    window.CLOUD_NAME = 'tu_cloud_name';
+    window.UPLOAD_PRESET = 'cuf_unsigned';
   </script>
+  <script src="admin.js"></script>
+  <script src="menu.js"></script>
 
 
 </body>
