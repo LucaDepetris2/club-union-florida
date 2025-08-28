@@ -1,11 +1,9 @@
-
 /* Aísla contenedor de noticias del estilo .container global */
 .news-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
-
 
 .news-card {
     display: flex;
@@ -15,11 +13,10 @@
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
     overflow: hidden;
     margin-bottom: 2rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
     align-items: stretch;
     min-height: 240px;
 }
-
 
 .news-card:hover {
     transform: translateY(-6px);
@@ -35,7 +32,6 @@
     align-self: stretch;
 }
 
-
 .news-card-content {
     width: 60%;
     padding: 2rem;
@@ -47,7 +43,10 @@
 
 .news-card.full {
     flex-direction: column;
-    max-height: 2000px;
+    max-height: none;
+    /* ✅ sin límite */
+    overflow: visible;
+    /* ✅ permite expandirse completo */
 }
 
 .news-card.full img {
@@ -152,49 +151,57 @@
 }
 
 .news-card-category {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
 }
-
 
 .news-card-text p {
-  margin-bottom: 1rem;
-  text-align: justify;
-}
-
-.news-card {
-  transition: max-height 0.4s ease, transform 0.3s ease, opacity 0.3s ease;
-  overflow: hidden;
+    margin-bottom: 1rem;
+    text-align: justify;
 }
 
 .news-card.full {
-  animation: expandCard 0.4s ease forwards;
+    animation: expandCard 0.4s ease forwards;
 }
 
 @media screen and (max-width: 600px) {
-  .news-card-text,
-  .news-card-text p {
-    text-align: left;
-  }
+
+    .news-card-text,
+    .news-card-text p {
+        text-align: left;
+    }
 }
 
-
 @keyframes expandCard {
-  from { opacity: 0.5; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0.5;
+        transform: scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @media (max-width: 768px) {
-  .news-card.full {
-    animation: expandCardMobile 0.4s ease forwards;
-  }
+    .news-card.full {
+        animation: expandCardMobile 0.4s ease forwards;
+    }
 
-  @keyframes expandCardMobile {
-    from { opacity: 0.5; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    @keyframes expandCardMobile {
+        from {
+            opacity: 0.5;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 }
