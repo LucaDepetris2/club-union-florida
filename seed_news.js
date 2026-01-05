@@ -2,7 +2,7 @@
 
 
 const API_URL = 'http://localhost:3000/api/news';
-const CATEGORIES = ['U10', 'U12', 'U13', 'U15', 'U17', 'U21', 'Primera', 'Liga Nacional'];
+const CATEGORIES = ['LIGA FEMENINA', 'PRIMERA', 'U21', 'U17', 'U15', 'U13', 'U12', 'U11'];
 const ITEMS_PER_CATEGORY = 6;
 
 async function seed() {

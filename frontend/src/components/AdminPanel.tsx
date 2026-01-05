@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.PUBLIC_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:3000/api');
 
 // Configuración Cloudinary (tomada del admin.html original como default)
 const CLOUD_NAME = 'dznbw2nma';
