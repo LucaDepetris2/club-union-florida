@@ -2,6 +2,7 @@
 node_modules/
 dist/
 public_old/
+frontend/dist/
 frontend/node_modules/
 backend/node_modules/
 .DS_Store

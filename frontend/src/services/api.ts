@@ -1,5 +1,15 @@
+const getApiUrl = () => {
+    // En el cliente (browser)
+    if (typeof window !== 'undefined') {
+        return import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+    }
+    // En el servidor (SSR) - Usar URL interna del contenedor/localhost
+    // NOTA: En Render o Docker, esto podría necesitar ajuste si el puerto es dinámico
+    const port = process.env.PORT || 3000;
+    return `http://localhost:${port}/api`;
+}
 
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_URL = getApiUrl();
 
 export interface NewsItem {
     id: string;

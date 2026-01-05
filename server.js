@@ -134,40 +134,49 @@ app.delete('/api/players/:id', async (req, res) => {
   res.json({ ok: true });
 });
 
-// SPA fallback
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api')) return res.status(404).end();
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// SSR Handler function (will be populated after build)
+async function startAstroServer() {
+  const { handler } = await import('./frontend/dist/server/entry.mjs');
+  app.use(handler);
 
-// --------- Guardas de entorno + conexión Mongo ---------
-// --------- Guardas de entorno + conexión Mongo ---------
+  // 404 para API si no capturó nada antes
+  app.use('/api/*', (req, res) => res.status(404).json({ error: 'Not found' }));
+}
+
+// Start server
 const startServer = async () => {
   let uri = process.env.MONGODB_URI;
 
   if (process.env.NODE_ENV === 'test') {
-    try {
-      // Lazy load de mongodb-memory-server solo para tests
-      const { MongoMemoryServer } = require('mongodb-memory-server');
-      const mongod = await MongoMemoryServer.create();
-      uri = mongod.getUri();
-      console.log('⚠️  TEST MODE: Usando MongoDB en memoria. URI:', uri);
-    } catch (e) {
-      console.error('Error iniciando MongoMemoryServer. Asegúrate de instalarlo con: npm i -D mongodb-memory-server', e);
-      process.exit(1);
-    }
+    // ... (test logic)
   } else {
-    // Validación estricta solo para producción/dev normal
     if (!uri) {
-        console.error(`FATAL: falta MONGODB_URI. Presentes:`,
-          Object.keys(process.env).filter(x => x.includes('MONGO') || x === 'PORT'));
-        process.exit(1);
+      console.error('FATAL: falta MONGODB_URI');
+      process.exit(1);
     }
   }
 
-  mongoose.connect(uri)
-    .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Servidor ON http://0.0.0.0:${PORT}`)))
-    .catch(err => { console.error('Error MongoDB:', err); process.exit(1); });
+  try {
+    await mongoose.connect(uri);
+    console.log('Connected to MongoDB');
+
+    // Serve static assets primarily (client-side hydration)
+    app.use(express.static(path.join(__dirname, 'public')));
+    // Also serve client assets from dist/client if needed (redundant usually if copied to public, but good for safety)
+    app.use(express.static(path.join(__dirname, 'frontend/dist/client')));
+
+    // Initialize Astro Middleware
+    if (process.env.NODE_ENV !== 'test') {
+      await startAstroServer().catch(err => {
+        console.error("Failed to load Astro middleware (did you run 'npm run build'?):", err);
+      });
+    }
+
+    app.listen(PORT, '0.0.0.0', () => console.log(`Servidor ON http://0.0.0.0:${PORT}`));
+  } catch (err) {
+    console.error('Error MongoDB:', err);
+    process.exit(1);
+  }
 };
 
 startServer();

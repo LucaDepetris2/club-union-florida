@@ -1,19 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getNewsById, getNews } from "../../services/api";
-
-export async function getStaticPaths() {
-    const allNews = await getNews(1, 1000); // Fetch all news
-    return allNews.map((newsItem) => ({
-        params: { id: newsItem.id },
-        props: { item: newsItem },
-    }));
-}
+import { getNewsById } from "../../services/api";
 
 const { id } = Astro.params;
-const { item: propItem } = Astro.props;
 
-const item = propItem || (id ? await getNewsById(id) : null);
+// En SSR, Astro.props no tiene 'item' (no hay getStaticPaths)
+// Fetch always
+const item = id ? await getNewsById(id) : null;
 
 if (!item) {
     return Astro.redirect("/404");
