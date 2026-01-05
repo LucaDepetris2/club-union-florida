@@ -1,0 +1,71 @@
+---
+interface Props {
+    id: string;
+    title: string;
+    subtitle?: string;
+    content?: string;
+    image?: string;
+    imagePosition?: string;
+    imageFit?: "cover" | "contain";
+    date: string;
+}
+
+const { id, title, subtitle, content, image, imagePosition, imageFit, date } =
+    Astro.props;
+
+// Función para formatear fecha dd/mm/yyyy
+const formatDate = (isoDate: string) => {
+    if (!isoDate) return "";
+    const d = new Date(isoDate);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+// Truncar texto para preview
+const truncate = (str: string, length: number) => {
+    if (!str) return "";
+    if (str.length <= length) return str;
+    return str.slice(0, length) + "...";
+};
+---
+
+<article class="news-card">
+    {
+        /* Imagen directa como en el legacy, o dentro de link si queremos click en foto */
+    }
+    {
+        image && (
+            <img
+                src={image}
+                alt={title}
+                class="news-img-legacy"
+                style={{
+                    objectPosition: imagePosition || "center center",
+                    objectFit: imageFit || "cover",
+                    backgroundColor:
+                        imageFit === "contain" ? "#f0f0f0" : "transparent",
+                }}
+            />
+        )
+    }
+
+    <div class="news-card-content">
+        {
+            /* Categoría opcional, aquí no la pasamos por prop individual a la card, pero mantenemos estructura */
+        }
+
+        <h3 class="news-card-title">{title}</h3>
+
+        {subtitle && <p class="news-card-subtitle">{subtitle}</p>}
+
+        <p class="news-card-date">{formatDate(date)}</p>
+
+        <div class="news-card-text">
+            <p>{truncate(content || "Ver nota completa...", 150)}</p>
+        </div>
+
+        <a href={`/noticias/${id}`} class="news-link">Leer más</a>
+    </div>
+</article>

@@ -1,0 +1,147 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import NewsCard from "../../components/NewsCard.astro";
+import { getNews } from "../../services/api";
+
+const allNews = await getNews();
+
+// Ordenar por fecha descendente (más recientes primero)
+allNews.sort(
+    (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime(),
+);
+
+// Categorías ordenadas
+// Categorías ordenadas
+const ORDERED_CATEGORIES = [
+    "Liga Nacional",
+    "Primera",
+    "U21",
+    "U17",
+    "U15",
+    "U13",
+    "U12",
+    "U10",
+];
+
+// Agrupar
+const newsByCategory = allNews.reduce(
+    (acc, item) => {
+        const cat = item.category || "Otras";
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(item);
+        return acc;
+    },
+    {} as Record<string, typeof allNews>,
+);
+
+// Filtrar categorías vacías y ordenar
+const sortedCategories = Object.keys(newsByCategory).sort((a, b) => {
+    const indexA = ORDERED_CATEGORIES.indexOf(a);
+    const indexB = ORDERED_CATEGORIES.indexOf(b);
+    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+    if (indexA !== -1) return -1;
+    if (indexB !== -1) return 1;
+    return a.localeCompare(b);
+});
+---
+
+<Layout title="Noticias - Club Unión Florida">
+    <!-- CSS cargado vía main.css en Layout -->
+
+    <main class="news-container">
+        <h1 class="page-title">Noticias por Categoría</h1>
+
+        {
+            sortedCategories.length === 0 ? (
+                <p style="text-align:center; padding: 2rem;">
+                    No hay noticias disponibles en este momento.
+                </p>
+            ) : (
+                sortedCategories.map((cat) => (
+                    <section class="category-section" data-category={cat}>
+                        <div class="category-header">
+                            <h2 class="category-title">{cat}</h2>
+                            <div class="carousel-controls">
+                                <button
+                                    class="nav-btn prev"
+                                    aria-label="Anterior"
+                                    type="button"
+                                >
+                                    ‹
+                                </button>
+                                <button
+                                    class="nav-btn next"
+                                    aria-label="Siguiente"
+                                    type="button"
+                                >
+                                    ›
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="carousel-viewport">
+                            <div class="carousel-track">
+                                {newsByCategory[cat].map((item) => (
+                                    <div class="carousel-item">
+                                        <NewsCard
+                                            id={item.id}
+                                            title={item.title}
+                                            subtitle={item.subtitle}
+                                            date={item.date}
+                                            image={item.image}
+                                            imagePosition={item.imagePosition}
+                                            imageFit={item.imageFit}
+                                            content={item.content}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                ))
+            )
+        }
+    </main>
+</Layout>
+
+<script>
+    // Lógica del Carrusel
+    document.querySelectorAll(".category-section").forEach((section) => {
+        const viewport = section.querySelector(
+            ".carousel-viewport",
+        ) as HTMLElement;
+        const track = section.querySelector(".carousel-track") as HTMLElement;
+        const btnPrev = section.querySelector(
+            ".nav-btn.prev",
+        ) as HTMLButtonElement;
+        const btnNext = section.querySelector(
+            ".nav-btn.next",
+        ) as HTMLButtonElement;
+
+        // Si no hay controles (ej mobile que los oculta css), no hacemos attach
+        if (!viewport || !btnNext || !btnPrev) return;
+
+        btnNext.addEventListener("click", () => {
+            const firstItem = section.querySelector(".carousel-item");
+            if (!firstItem) return;
+
+            const itemWidth = firstItem.clientWidth;
+            // Leer gap dinámicamente para soporte desktop (20px) vs mobile (15px)
+            const gap = parseFloat(getComputedStyle(track).gap) || 0;
+            const scrollAmount = itemWidth + gap;
+
+            viewport.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        });
+
+        btnPrev.addEventListener("click", () => {
+            const firstItem = section.querySelector(".carousel-item");
+            if (!firstItem) return;
+
+            const itemWidth = firstItem.clientWidth;
+            const gap = parseFloat(getComputedStyle(track).gap) || 0;
+            const scrollAmount = itemWidth + gap;
+
+            viewport.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        });
+    });
+</script>

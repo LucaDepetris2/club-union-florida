@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getPlayers } from '../services/api';
+
+const players = await getPlayers();
+---
+
+<Layout title="Plantel - Club Unión Florida">
+    <main class="container">
+        <h1>Plantel Liga Nacional</h1>
+        <div class="players-grid">
+            {players.map((p) => (
+                <div class="player-card">
+                    <div class="image-wrapper">
+                        {p.image ? (
+                            <img src={p.image} alt={p.name} />
+                        ) : (
+                            <div style="height:300px; background:#ddd; display:flex; align-items:center; justify-content:center;">Sin Imagen</div>
+                        )}
+                    </div>
+                    <div class="info">
+                        {p.name}
+                    </div>
+                    {/* Bio oculta o en hover si se desea implementar interactividad */}
+                </div>
+            ))}
+        </div>
+    </main>
+</Layout>

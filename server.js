@@ -141,18 +141,33 @@ app.get('*', (req, res) => {
 });
 
 // --------- Guardas de entorno + conexión Mongo ---------
-function must(k) {
-  const v = process.env[k];
-  if (!v) {
-    console.error(`FATAL: falta ${k}. Presentes:`,
-      Object.keys(process.env).filter(x => x.includes('MONGO') || x === 'PORT'));
-    process.exit(1);
+// --------- Guardas de entorno + conexión Mongo ---------
+const startServer = async () => {
+  let uri = process.env.MONGODB_URI;
+
+  if (process.env.NODE_ENV === 'test') {
+    try {
+      // Lazy load de mongodb-memory-server solo para tests
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      uri = mongod.getUri();
+      console.log('⚠️  TEST MODE: Usando MongoDB en memoria. URI:', uri);
+    } catch (e) {
+      console.error('Error iniciando MongoMemoryServer. Asegúrate de instalarlo con: npm i -D mongodb-memory-server', e);
+      process.exit(1);
+    }
+  } else {
+    // Validación estricta solo para producción/dev normal
+    if (!uri) {
+        console.error(`FATAL: falta MONGODB_URI. Presentes:`,
+          Object.keys(process.env).filter(x => x.includes('MONGO') || x === 'PORT'));
+        process.exit(1);
+    }
   }
-  return v;
-}
 
-const MONGODB_URI = must('MONGODB_URI');
+  mongoose.connect(uri)
+    .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Servidor ON http://0.0.0.0:${PORT}`)))
+    .catch(err => { console.error('Error MongoDB:', err); process.exit(1); });
+};
 
-mongoose.connect(MONGODB_URI)
-  .then(() => app.listen(PORT, '0.0.0.0', () => console.log(`Servidor ON http://0.0.0.0:${PORT}`)))
-  .catch(err => { console.error('Error MongoDB:', err); process.exit(1); });
+startServer();

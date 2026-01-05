@@ -1,0 +1,98 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getNewsById, getNews } from "../../services/api";
+
+export async function getStaticPaths() {
+    const allNews = await getNews(1, 1000); // Fetch all news
+    return allNews.map((newsItem) => ({
+        params: { id: newsItem.id },
+        props: { item: newsItem },
+    }));
+}
+
+const { id } = Astro.params;
+const { item: propItem } = Astro.props;
+
+const item = propItem || (id ? await getNewsById(id) : null);
+
+if (!item) {
+    return Astro.redirect("/404");
+}
+---
+
+<Layout title={item.title}>
+    <link rel="stylesheet" href="/css/news.css" />
+
+    <!-- DISEÑO ESTÁNDAR LIMPIO (SAFE LAYOUT) -->
+    <main class="news-standard-layout">
+        <article class="standard-article">
+            <!-- Usamos DIV en lugar de HEADER para evitar conflicto con navbar.css global -->
+            <div class="standard-header">
+                <span class="standard-category"
+                    >{item.category || "Novedades"}</span
+                >
+                <h1 class="standard-title">{item.title}</h1>
+                {
+                    item.subtitle && (
+                        <p class="standard-subtitle">{item.subtitle}</p>
+                    )
+                }
+
+                <div class="standard-date-wrapper">
+                    <span class="standard-date">
+                        {
+                            new Date(item.date).toLocaleDateString("es-AR", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                            })
+                        }
+                    </span>
+                </div>
+            </div>
+
+            {
+                item.image && (
+                    <div class="standard-image-container">
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            class="standard-image"
+                            style={{
+                                objectPosition:
+                                    item.imagePosition || "center center",
+                                objectFit: item.imageFit || "cover",
+                                maxHeight:
+                                    item.imageFit === "contain"
+                                        ? "80vh"
+                                        : "500px",
+                                width:
+                                    item.imageFit === "contain"
+                                        ? "auto"
+                                        : "100%",
+                                maxWidth: "100%",
+                                margin: "0 auto",
+                                display: "block",
+                                backgroundColor:
+                                    item.imageFit === "contain"
+                                        ? "#f8f9fa"
+                                        : "transparent",
+                            }}
+                        />
+                    </div>
+                )
+            }
+
+            <div
+                class="standard-body"
+                set:html={item.content.replace(/\n/g, "<br />")}
+            />
+
+            <div class="standard-footer">
+                <a href="/noticias" class="standard-back-btn">
+                    Volver a Noticias
+                </a>
+            </div>
+        </article>
+    </main>
+</Layout>

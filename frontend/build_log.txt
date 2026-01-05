@@ -1,0 +1,23 @@
+
+> frontend@0.0.1 build
+> astro build
+
+[2m00:08:09[22m [34m[content][39m Syncing content
+[2m00:08:09[22m [34m[content][39m Synced content
+[2m00:08:09[22m [34m[types][39m Generated [2m65ms[22m
+[2m00:08:09[22m [34m[build][39m output: [34m"static"[39m
+[2m00:08:09[22m [34m[build][39m mode: [34m"static"[39m
+[2m00:08:09[22m [34m[build][39m directory: [34mA:\Proyectos\club-union-florida\frontend\dist\[39m
+[2m00:08:09[22m [34m[build][39m Collecting build info...
+[2m00:08:09[22m [34m[build][39m [32mÔ£ô Completed in 209ms.[39m
+[2m00:08:09[22m [34m[build][39m Building static entrypoints...
+00:08:10 [ERROR] [vite] Ô£ù Build failed in 568ms
+Unexpected "const"
+  Location:
+    A:/Proyectos/club-union-florida/frontend/src/pages/noticias/[id].astro:31:41
+  Stack trace:
+    at failureErrorWithLog (A:\Proyectos\club-union-florida\frontend\node_modules\esbuild\lib\main.js:1467:15)
+    at responseCallbacks.<computed> (A:\Proyectos\club-union-florida\frontend\node_modules\esbuild\lib\main.js:603:9)
+    at Socket.readFromStdout (A:\Proyectos\club-union-florida\frontend\node_modules\esbuild\lib\main.js:581:7)
+    at addChunk (node:internal/streams/readable:559:12)
+    at Readable.push (node:internal/streams/readable:390:5)

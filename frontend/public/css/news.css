@@ -1,0 +1,523 @@
+/* =========================================================
+   NEWS CSS REFACTORED (LEGACY REFERENCE + CAROUSEL ADAPTER)
+   ========================================================= */
+
+/* FIX GLOBAL: Asegurar modelo de caja */
+.news-container,
+.news-container * {
+    box-sizing: border-box;
+}
+
+/* --- 1. BASE CONTAINER (Adaptado) --- */
+.news-container {
+    max-width: 1400px;
+    /* Un poco más ancho para el carrusel de 3 */
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* --- 2. CATEGORY SECTIONS & CAROUSEL UI --- */
+.category-section {
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--secondary);
+    background: #f9f9f9;
+}
+
+.category-title {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* Controles Carrusel */
+.carousel-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    background: #fff;
+    color: var(--primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 0;
+    padding-bottom: 4px;
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* --- 3. CAROUSEL LAYOUT --- */
+.carousel-viewport {
+    overflow-x: hidden;
+    /* JS Scroll en desktop */
+    width: 100%;
+    padding: 10px 0;
+    /* Espacio para sombras */
+}
+
+.carousel-track {
+    display: flex;
+    gap: 25px;
+    /* Espacio entre tarjetas */
+    width: max-content;
+    padding: 0 5px;
+    align-items: stretch;
+    /* Misma altura */
+}
+
+.carousel-item {
+    width: 380px;
+    /* Ancho fijo Desktop */
+    flex: 0 0 auto;
+    display: flex;
+}
+
+/* --- 4. NEWS CARD STYLES (COPIED FROM LEGACY public/css/news.css) --- */
+/* Adaptación: Legacy era Row, aquí usamos Column para el carrusel */
+
+.news-card {
+    display: flex;
+    flex-direction: column;
+    /* CHANGE: Column instead of Row for carousel items */
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    /* margin-bottom: 2rem; REMOVED: Handled by track gap */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    height: 100%;
+    width: 100%;
+}
+
+.news-card:hover {
+    transform: translateY(-6px);
+}
+
+.news-card img {
+    /* Legacy: width: 40%; aspect-ratio: 4/3; */
+    /* Adaptation for Column: */
+    width: 100%;
+    height: 220px;
+    /* Altura fija imagen */
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    /* Top radius only */
+    display: block;
+}
+
+.news-card-content {
+    /* Legacy: width: 60%; padding: 2rem; */
+    /* Adaptation: */
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Contenido arriba */
+    flex: 1;
+    background: #fff;
+    text-align: left;
+    /* Asegurar left align */
+}
+
+.news-card-title {
+    font-size: 1.4rem;
+    /* Legacy was 1.5rem, slightly smaller for narrow card */
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+}
+
+.news-card-subtitle {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    font-style: italic;
+}
+
+.news-card-date {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+}
+
+.news-card-text {
+    font-size: 1rem;
+    color: #444;
+    text-align: left;
+    /* Legacy was justify, changed to left for narrow col */
+    line-height: 1.6;
+    margin: 0.5rem 0 1.5rem 0;
+    letter-spacing: 0.2px;
+    /* Truncado visual */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-link {
+    align-self: flex-start;
+    margin-top: auto;
+    /* Empujar al fondo */
+    font-weight: bold;
+    color: var(--secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s;
+    font-size: 1.1rem;
+}
+
+.news-link:hover {
+    text-decoration: underline;
+}
+
+/* --- 5. RESPONSIVE / MOBILE FIXES --- */
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+    .carousel-item {
+        width: 300px;
+        /* Reducir un poco en tablets */
+    }
+}
+
+/* Mobile Strict - FIX DIMINUTO */
+@media screen and (max-width: 768px) {
+
+    /* Ajuste: Remover scroll snap y reducir espacios */
+    html,
+    body {
+        height: auto;
+        overflow-y: auto;
+        scroll-snap-type: none;
+    }
+
+    .news-container {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Sección normal sin snap */
+    .category-section {
+        height: auto;
+        min-height: 0;
+        width: 100%;
+        box-sizing: border-box;
+
+        scroll-snap-align: none;
+
+        /* Espaciado reducido entre categorías */
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        border-bottom: 1px solid #eee;
+        background: #fff;
+    }
+
+    .page-title {
+        display: none;
+    }
+
+    .category-header {
+        margin: 0;
+        padding: 0.8rem 1rem;
+        background: #fff;
+        border-bottom: 2px solid var(--secondary);
+    }
+
+    .category-title {
+        font-size: 1.8rem;
+        /* GRANDE como pedido */
+    }
+
+    .nav-btn {
+        width: 44px;
+        /* Dedos grandes */
+        height: 44px;
+        font-size: 1.6rem;
+    }
+
+    /* Carousel Logic Mobile */
+    .carousel-viewport {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 10px;
+    }
+
+    .carousel-track {
+        width: auto;
+        /* Reset desktop width */
+        gap: 0;
+        /* Sin gap para efecto slider puro */
+        display: flex;
+        align-items: flex-start;
+        /* Evitar stretch incontrolado */
+    }
+
+    .carousel-item {
+        /* FIX: 100VW width for 1 item per view */
+        width: 100vw;
+        min-width: 100vw;
+        padding: 0 10px;
+        /* Margen seguro lateral */
+        box-sizing: border-box;
+        /* Incluir padding en width */
+        scroll-snap-align: center;
+        flex-shrink: 0;
+    }
+
+    /* Card Mobile Redefinition */
+    .news-card {
+        max-width: none;
+        /* Dejar que llene el item (que es 100vw-20px) */
+        height: auto;
+        /* Altura natural */
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        /* Sombra visible */
+    }
+
+    .news-card img {
+        height: auto;
+        aspect-ratio: 16/9;
+        /* Formato panorámico mobile */
+    }
+
+    .news-card-content {
+        padding: 1.5rem;
+        /* Padding cómodo */
+    }
+
+    .news-card-title {
+        font-size: 1.5rem;
+        /* Título Legacy Mobile */
+    }
+
+    .news-card-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .news-card-text {
+        font-size: 1.1rem;
+        -webkit-line-clamp: 6;
+        /* Mostrar más texto */
+    }
+
+    .news-link {
+        font-size: 1.2rem;
+        font-size: 1.1rem;
+        padding: 5px 0;
+    }
+}
+
+/* =========================================
+   DISEÑO ESTÁNDAR LIMPIO (SAFE LAYOUT)
+   ========================================= */
+
+.news-standard-layout {
+    width: 100%;
+    background-color: #fff;
+    /* Espacio justo para el navbar (80px) + aire reducido */
+    padding-top: 60px;
+    padding-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+}
+
+.standard-article {
+    width: 100%;
+    max-width: 98%;
+    /* Casi full width, margen mínimo */
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER - Compacto */
+.standard-header {
+    text-align: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+    /* Menos padding */
+    background-color: transparent;
+    color: #333;
+}
+
+.standard-category {
+    display: inline-block;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+    /* Mínimo */
+}
+
+.standard-title {
+    font-family: "Segoe UI", Roboto, sans-serif;
+    font-size: 2.2rem;
+    /* Más chico para desktop */
+    line-height: 1.1;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    /* Pegado al subtítulo */
+}
+
+.standard-subtitle {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--secondary) !important;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.standard-date-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.standard-date {
+    font-size: 0.9rem;
+    color: #999;
+    font-style: italic;
+}
+
+/* IMAGEN */
+.standard-image-container {
+    width: 100%;
+    max-width: 1200px;
+    /* Permitir que sea ancha */
+    margin: 0 auto 1rem auto;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.standard-image {
+    width: 100%;
+    height: 500px;
+    /* Force height to ensure banner-like crop on Desktop */
+    object-fit: cover;
+    display: block;
+    transition: object-position 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .standard-image {
+        height: auto;
+        aspect-ratio: 16/9;
+        /* Force panoramic aspect on mobile */
+        max-height: 350px;
+    }
+}
+
+/* BODY */
+.standard-body {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.05rem;
+    /* Texto más compacto */
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+    max-width: 1400px;
+    /* Evitar líneas eternas de 1920px */
+    margin: 0 auto;
+}
+
+.standard-body p {
+    margin-bottom: 0.8rem;
+}
+
+/* FOOTER / BUTTON */
+.standard-footer {
+    margin-top: 2rem;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 1rem;
+}
+
+.standard-back-btn {
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    background-color: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.standard-back-btn:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+    .news-standard-layout {
+        padding-top: 100px;
+    }
+
+    .standard-title {
+        font-size: 2rem;
+    }
+
+    .standard-subtitle {
+        font-size: 1.15rem;
+    }
+
+    .standard-body {
+        text-align: left;
+        /* Evitar ríos en mobile */
+    }
+}

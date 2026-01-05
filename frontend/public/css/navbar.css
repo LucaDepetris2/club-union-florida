@@ -1,0 +1,184 @@
+header {
+    background-color: var(--primary);
+    color: var(--light);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    padding-top: 80px;
+    /* Para evitar que el header tape el contenido */
+    overflow-x: hidden;
+    /* FIX: Evitar scroll lateral en toda la página */
+    width: 100vw;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+        /* Altura real Navbar mobile */
+        /* Scroll snap support */
+    }
+}
+
+/* Navbar base */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    background-color: var(--primary);
+}
+
+/* Logo */
+.nav-logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo img,
+.logo-img {
+    height: 60px;
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Menú principal */
+.nav-center {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-center a {
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.nav-center a:hover {
+    background-color: var(--secondary);
+}
+
+/* Íconos dentro del menú */
+.nav-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-icons a img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.2s ease;
+}
+
+.nav-icons a:hover img {
+    transform: scale(1.1);
+    filter: brightness(0) invert(0.7);
+}
+
+/* Botón hamburguesa */
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    color: var(--light);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* -------------------- */
+/*   RESPONSIVE MENU    */
+/* -------------------- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+    }
+
+    .nav-center {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        flex-direction: column;
+        background-color: var(--primary);
+        width: 220px;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.3s ease;
+        overflow: visible;
+        padding-bottom: 0.5rem;
+    }
+
+    .nav-center.show {
+        display: flex;
+    }
+
+    .nav-center.show .nav-icons {
+        display: flex;
+        /* 👈 Forzamos a mostrarlos solo cuando el menú está visible */
+    }
+
+    .nav-center a {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        text-align: left;
+    }
+
+    .nav-center .nav-icons {
+        display: none;
+        /* 👈 Ocultos por defecto, hasta que se active el menú */
+        justify-content: center;
+        gap: 1.5rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 0.8rem 1rem 0;
+    }
+
+    /* Íconos fuera del menú: ocultos en mobile */
+    .navbar>.nav-icons {
+        display: none;
+    }
+}
+
+
+
+
+@media (max-width: 480px) {
+    .nav-logo img {
+        height: 45px;
+    }
+
+    .nav-center a {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

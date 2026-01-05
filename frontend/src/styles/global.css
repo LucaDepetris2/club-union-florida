@@ -1,0 +1,5 @@
+/* Global styles imports are handled via public/css/main.css for now */
+/* You can start migrating Tailwind @apply here later */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

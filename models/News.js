@@ -7,7 +7,9 @@ const NewsSchema = new mongoose.Schema({
     content: { type: String, required: true },
     image: String,         // URL (Cloudinary) o dataURI si quisieras (no recomendado)
     date: { type: String, required: true }, // "YYYY-MM-DD" como usabas en el front
-    category: String
-}, { timestamps: true });
+    category: String,
+    imagePosition: { type: String, default: 'center center' }, // CSS object-position values e.g. 'left top'
+    imageFit: { type: String, default: 'cover' } // 'cover' (crop) or 'contain' (full)
+});
 
 module.exports = mongoose.model('News', NewsSchema);

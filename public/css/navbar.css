@@ -12,6 +12,17 @@ header {
 body {
     padding-top: 80px;
     /* Para evitar que el header tape el contenido */
+    overflow-x: hidden;
+    /* FIX: Evitar scroll lateral en toda la página */
+    width: 100vw;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+        /* Altura real Navbar mobile */
+        /* Scroll snap support */
+    }
 }
 
 /* Navbar base */
