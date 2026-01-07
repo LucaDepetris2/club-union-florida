@@ -286,7 +286,7 @@ const AdminPanel = () => {
                                         <option value="U17">U17</option>
                                         <option value="U21">U21</option>
                                         <option value="Primera">Primera</option>
-                                        <option value="Liga Nacional">Liga Nacional</option>
+                                        <option value="LIGA FEMENINA">LIGA FEMENINA</option>
                                     </select>
 
                                     <label>Fecha</label>
