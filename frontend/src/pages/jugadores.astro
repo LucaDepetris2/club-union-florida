@@ -9,7 +9,7 @@ const players = await getPlayers();
     <main class="container">
         <h1>Plantel Liga Nacional</h1>
         <div class="players-grid">
-            {players.map((p) => (
+            {players.map((p, i) => (
                 <div class="player-card">
                     <div class="image-wrapper">
                         {p.image ? (
@@ -17,17 +17,25 @@ const players = await getPlayers();
                         ) : (
                             <div style="height:300px; background:#ddd; display:flex; align-items:center; justify-content:center;">Sin Imagen</div>
                         )}
+                        <div class="description" id={`bio-${i}`}>
+                            {(p.bio || 'Sin biografía disponible')
+                                .replace(/\.\s/g, '.\n')
+                                .split('\n')
+                                .map((t) => t.trim())
+                                .filter(Boolean)
+                                .map((t) => <p>{t}</p>)}
+                        </div>
                     </div>
                     <div class="info">
-                        {p.name}
-                    </div>
-                    <div class="description">
-                        {(p.bio || 'Sin biografía disponible')
-                            .replace(/\.\s/g, '.\n')
-                            .split('\n')
-                            .map((t) => t.trim())
-                            .filter(Boolean)
-                            .map((t) => <p>{t}</p>)}
+                        <span class="player-name">{p.name}</span>
+                        <button
+                            type="button"
+                            class="bio-btn"
+                            aria-expanded="false"
+                            aria-controls={`bio-${i}`}
+                        >
+                            Bio
+                        </button>
                     </div>
                 </div>
             ))}
@@ -38,17 +46,21 @@ const players = await getPlayers();
 <script>
     let openCard: Element | null = null;
 
+    const setOpen = (card: Element, open: boolean) => {
+        card.classList.toggle('active', open);
+        card.querySelector('.bio-btn')?.setAttribute('aria-expanded', String(open));
+    };
+
     document.addEventListener('click', (e) => {
-        const card = (e.target as Element | null)?.closest('.player-card') ?? null;
+        const btn = (e.target as Element | null)?.closest('.bio-btn');
+        if (!btn) return;
+        const card = btn.closest('.player-card');
+        if (!card) return;
 
-        if (openCard && openCard !== card) {
-            openCard.classList.remove('active');
-            openCard = null;
-        }
+        if (openCard && openCard !== card) setOpen(openCard, false);
 
-        if (card) {
-            const isActive = card.classList.toggle('active');
-            openCard = isActive ? card : null;
-        }
+        const open = !card.classList.contains('active');
+        setOpen(card, open);
+        openCard = open ? card : null;
     });
 </script>

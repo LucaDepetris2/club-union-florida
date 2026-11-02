@@ -17,8 +17,7 @@
     flex-direction: column;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
-    cursor: pointer;
-    position: relative; /* Necesario para overlay */
+    position: relative;
 }
 
 .player-card:hover {
@@ -33,13 +32,59 @@
     transition: opacity 0.3s ease;
 }
 
+/* El overlay de la bio cubre solo la foto, no la barra con el botón */
+.player-card .image-wrapper {
+    position: relative;
+}
+
+.player-card .image-wrapper img {
+    display: block;
+}
+
 .player-card .info {
     font-weight: bold;
-    text-align: center;
-    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem 0.6rem 1rem;
     background-color: var(--primary);
     color: white;
     z-index: 1;
+}
+
+.player-card .player-name {
+    text-align: left;
+    line-height: 1.3;
+}
+
+/* Botón "Bio": mismo lenguaje que .standard-back-btn, invertido para la barra azul */
+.player-card .bio-btn {
+    flex-shrink: 0;
+    padding: 0.35rem 1rem;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.player-card .bio-btn:hover,
+.player-card .bio-btn:focus-visible,
+.player-card.active .bio-btn {
+    background-color: #fff;
+    color: var(--primary);
+}
+
+.player-card .bio-btn:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
 }
 
 /* Biografía moderna con overlay */
@@ -64,6 +109,7 @@
 
     overflow-y: auto;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease;
     z-index: 2;
 
@@ -84,6 +130,7 @@
 }
 .player-card.active .description {
     opacity: 1;
+    pointer-events: auto;
 }
 
 /* Responsive */
