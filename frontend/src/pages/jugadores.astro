@@ -21,9 +21,34 @@ const players = await getPlayers();
                     <div class="info">
                         {p.name}
                     </div>
-                    {/* Bio oculta o en hover si se desea implementar interactividad */}
+                    <div class="description">
+                        {(p.bio || 'Sin biografía disponible')
+                            .replace(/\.\s/g, '.\n')
+                            .split('\n')
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                            .map((t) => <p>{t}</p>)}
+                    </div>
                 </div>
             ))}
         </div>
     </main>
 </Layout>
+
+<script>
+    let openCard: Element | null = null;
+
+    document.addEventListener('click', (e) => {
+        const card = (e.target as Element | null)?.closest('.player-card') ?? null;
+
+        if (openCard && openCard !== card) {
+            openCard.classList.remove('active');
+            openCard = null;
+        }
+
+        if (card) {
+            const isActive = card.classList.toggle('active');
+            openCard = isActive ? card : null;
+        }
+    });
+</script>
