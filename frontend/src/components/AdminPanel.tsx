@@ -5,6 +5,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL || (import.meta.env.PROD ? '/api'
 // Configuración Cloudinary (tomada del admin.html original como default)
 const CLOUD_NAME = 'dznbw2nma';
 const UPLOAD_PRESET = 'cuf_unsigned';
+const TOKEN_KEY = 'cuf_admin_token';
 
 interface NewsItem {
     id?: string;
@@ -44,6 +45,32 @@ const AdminPanel = () => {
     const [formData, setFormData] = useState<any>({});
     const [uploading, setUploading] = useState(false);
 
+    // Restaurar sesión si hay token guardado (sobrevive a un F5)
+    useEffect(() => {
+        if (sessionStorage.getItem(TOKEN_KEY)) setIsLoggedIn(true);
+    }, []);
+
+    const logout = (message = '') => {
+        sessionStorage.removeItem(TOKEN_KEY);
+        setIsLoggedIn(false);
+        setIsModalOpen(false);
+        setError(message);
+    };
+
+    // fetch con el token de admin; si el servidor responde 401, vuelve al login
+    const authFetch = async (url: string, opts: RequestInit = {}) => {
+        const token = sessionStorage.getItem(TOKEN_KEY);
+        const res = await fetch(url, {
+            ...opts,
+            headers: { ...(opts.headers || {}), Authorization: `Bearer ${token}` },
+        });
+        if (res.status === 401) {
+            logout('Sesión expirada, ingresá de nuevo');
+            throw new Error('unauthorized');
+        }
+        return res;
+    };
+
     useEffect(() => {
         if (isLoggedIn) {
             fetchNews();
@@ -60,11 +87,12 @@ const AdminPanel = () => {
                 body: JSON.stringify({ password }),
             });
             const data = await res.json();
-            if (data.success) {
+            if (data.success && data.token) {
+                sessionStorage.setItem(TOKEN_KEY, data.token);
                 setIsLoggedIn(true);
                 setError('');
             } else {
-                setError('Contraseña incorrecta');
+                setError(data.message || 'Contraseña incorrecta');
             }
         } catch (err) {
             setError('Error de conexión');
@@ -93,7 +121,11 @@ const AdminPanel = () => {
 
     const handleDelete = async (id: string, type: 'news' | 'players') => {
         if (!confirm('¿Estás seguro de eliminar este elemento?')) return;
-        await fetch(`${API_URL}/${type}/${id}`, { method: 'DELETE' });
+        try {
+            await authFetch(`${API_URL}/${type}/${id}`, { method: 'DELETE' });
+        } catch {
+            return;
+        }
         type === 'news' ? fetchNews() : fetchPlayers();
     };
 
@@ -124,7 +156,7 @@ const AdminPanel = () => {
                 ? `${API_URL}/${endpoint}/${editingItem.id || editingItem._id}`
                 : `${API_URL}/${endpoint}`;
 
-            const res = await fetch(url, {
+            const res = await authFetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -135,6 +167,7 @@ const AdminPanel = () => {
             setIsModalOpen(false);
             modalType === 'news' ? fetchNews() : fetchPlayers();
         } catch (err) {
+            if ((err as Error).message === 'unauthorized') return;
             alert('Error al guardar cambios');
             console.error(err);
         } finally {

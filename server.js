@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -54,10 +55,60 @@ async function maybeUploadToCloudinary(base64) {
 // Rate limit básico a /api
 app.use('/api', rateLimit({ windowMs: 60_000, max: 300 }));
 
-// Login simple
-app.post('/api/login', (req, res) => {
+// ============ AUTH ============
+if (!process.env.ADMIN_PASSWORD) {
+  console.warn('WARN: falta ADMIN_PASSWORD, usando la contraseña por defecto. Configurala en el hosting.');
+}
+
+const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12 h
+const TOKEN_SECRET = process.env.TOKEN_SECRET
+  || crypto.createHash('sha256').update(`cuf-token:${ADMIN_PASSWORD}`).digest('hex');
+
+const sha256 = s => crypto.createHash('sha256').update(String(s)).digest();
+const sign = data => crypto.createHmac('sha256', TOKEN_SECRET).update(data).digest('base64url');
+
+function createToken() {
+  const payload = Buffer.from(JSON.stringify({ exp: Date.now() + TOKEN_TTL_MS })).toString('base64url');
+  return `${payload}.${sign(payload)}`;
+}
+
+function verifyToken(token) {
+  if (typeof token !== 'string') return false;
+  const [payload, signature] = token.split('.');
+  if (!payload || !signature) return false;
+  const expected = Buffer.from(sign(payload));
+  const given = Buffer.from(signature);
+  if (expected.length !== given.length || !crypto.timingSafeEqual(expected, given)) return false;
+  try {
+    const { exp } = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    return typeof exp === 'number' && Date.now() < exp;
+  } catch {
+    return false;
+  }
+}
+
+function requireAdmin(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (verifyToken(token)) return next();
+  res.status(401).json({ error: 'No autorizado' });
+}
+
+// Rate limit estricto al login para frenar fuerza bruta
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60_000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Demasiados intentos, probá en unos minutos' }
+});
+
+app.post('/api/login', loginLimiter, (req, res) => {
   const { password } = req.body || {};
-  if (password === ADMIN_PASSWORD) return res.json({ success: true });
+  // Comparar hashes de igual largo en tiempo constante
+  if (typeof password === 'string' && crypto.timingSafeEqual(sha256(password), sha256(ADMIN_PASSWORD))) {
+    return res.json({ success: true, token: createToken() });
+  }
   res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
 });
 
@@ -78,14 +129,14 @@ app.get('/api/news/:id', async (req, res) => {
   res.json(mapId(item));
 });
 
-app.post('/api/news', async (req, res) => {
+app.post('/api/news', requireAdmin, async (req, res) => {
   const payload = { ...req.body };
   if (payload.image) payload.image = await maybeUploadToCloudinary(payload.image);
   const doc = await News.create(payload);
   res.status(201).json({ id: doc._id });
 });
 
-app.put('/api/news/:id', async (req, res) => {
+app.put('/api/news/:id', requireAdmin, async (req, res) => {
   const payload = { ...req.body };
   if (payload.image && payload.image.startsWith('data:')) {
     payload.image = await maybeUploadToCloudinary(payload.image);
@@ -95,7 +146,7 @@ app.put('/api/news/:id', async (req, res) => {
   res.json({ ok: true });
 });
 
-app.delete('/api/news/:id', async (req, res) => {
+app.delete('/api/news/:id', requireAdmin, async (req, res) => {
   await News.findByIdAndDelete(req.params.id);
   res.json({ ok: true });
 });
@@ -112,14 +163,14 @@ app.get('/api/players/:id', async (req, res) => {
   res.json(mapId(item));
 });
 
-app.post('/api/players', async (req, res) => {
+app.post('/api/players', requireAdmin, async (req, res) => {
   const payload = { ...req.body };
   if (payload.image) payload.image = await maybeUploadToCloudinary(payload.image);
   const doc = await Player.create(payload);
   res.status(201).json({ id: doc._id });
 });
 
-app.put('/api/players/:id', async (req, res) => {
+app.put('/api/players/:id', requireAdmin, async (req, res) => {
   const payload = { ...req.body };
   if (payload.image && payload.image.startsWith('data:')) {
     payload.image = await maybeUploadToCloudinary(payload.image);
@@ -129,7 +180,7 @@ app.put('/api/players/:id', async (req, res) => {
   res.json({ ok: true });
 });
 
-app.delete('/api/players/:id', async (req, res) => {
+app.delete('/api/players/:id', requireAdmin, async (req, res) => {
   await Player.findByIdAndDelete(req.params.id);
   res.json({ ok: true });
 });
