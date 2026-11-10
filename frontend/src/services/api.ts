@@ -21,6 +21,7 @@ export interface NewsItem {
     imageFit?: 'cover' | 'contain';
     date: string;
     category?: string;
+    views?: number;
 }
 
 export interface PlayerItem {

@@ -4,6 +4,10 @@ interface Props {
 }
 
 const { title } = Astro.props;
+
+// Google Analytics 4: solo si hay ID configurado (variable de build) y fuera del panel admin
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const loadAnalytics = Boolean(GA_ID) && !Astro.url.pathname.startsWith("/admin");
 // import '../styles/global.css'; // Desactivamos reset de Tailwind para mantener estilos originales
 ---
 
@@ -21,6 +25,26 @@ const { title } = Astro.props;
     <!-- Legacy styles -->
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {
+      loadAnalytics && (
+        <>
+          <script
+            is:inline
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          />
+          <script is:inline define:vars={{ GA_ID }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            window.gtag = gtag;
+            gtag("js", new Date());
+            gtag("config", GA_ID);
+          </script>
+        </>
+      )
+    }
   </head>
   <body>
     <header>

@@ -18,6 +18,7 @@ interface NewsItem {
     image: string;
     imagePosition?: string;
     imageFit?: 'cover' | 'contain';
+    views?: number;
 }
 
 interface PlayerItem {
@@ -34,6 +35,7 @@ const AdminPanel = () => {
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState<'news' | 'players'>('news');
     const [news, setNews] = useState<NewsItem[]>([]);
+    const [newsSort, setNewsSort] = useState<'date' | 'views'>('date');
     const [players, setPlayers] = useState<PlayerItem[]>([]);
 
     // Modal State
@@ -231,10 +233,21 @@ const AdminPanel = () => {
                         <section id="tab-news" className="tab active">
                             <div className="toolbar">
                                 <input id="news-query" type="search" placeholder="Buscar noticia por título, categoría…" />
+                                <select
+                                    value={newsSort}
+                                    onChange={e => setNewsSort(e.target.value as 'date' | 'views')}
+                                    aria-label="Ordenar noticias"
+                                >
+                                    <option value="date">Más recientes</option>
+                                    <option value="views">Más vistas</option>
+                                </select>
                                 <button className="btn primary" onClick={() => openModal('news')}>+ Nueva noticia</button>
                             </div>
                             <div className="cards">
-                                {news.map(item => (
+                                {(newsSort === 'views'
+                                    ? [...news].sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+                                    : news
+                                ).map(item => (
                                     <article className="card" key={item.id || item._id}>
                                         <img className="thumb" src={item.image || '/img/placeholder.jpg'} alt="" style={{ objectPosition: item.imagePosition || 'center center' }} />
                                         <div className="meta">
@@ -242,6 +255,7 @@ const AdminPanel = () => {
                                             <div className="chips">
                                                 {item.category && <span className="chip">{item.category}</span>}
                                                 {item.date && <span className="chip">{item.date}</span>}
+                                                <span className="chip" title="Vistas (1 por navegador cada 24 h)">👁 {item.views ?? 0} vistas</span>
                                             </div>
                                         </div>
                                         <div className="actions">

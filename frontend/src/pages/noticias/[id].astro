@@ -18,7 +18,7 @@ if (!item) {
 
     <!-- DISEÑO ESTÁNDAR LIMPIO (SAFE LAYOUT) -->
     <main class="news-standard-layout">
-        <article class="standard-article">
+        <article class="standard-article" data-news-id={item.id}>
             <!-- Usamos DIV en lugar de HEADER para evitar conflicto con navbar.css global -->
             <div class="standard-header">
                 <span class="standard-category"
@@ -89,3 +89,36 @@ if (!item) {
         </article>
     </main>
 </Layout>
+
+<script>
+    // Contador de vistas: se cuenta desde el navegador (los bots sin JS no suman)
+    // y como máximo una vez cada 24 h por noticia y navegador.
+    const API =
+        import.meta.env.PUBLIC_API_URL ||
+        (import.meta.env.PROD ? "/api" : "http://localhost:3000/api");
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    const id = document.querySelector<HTMLElement>("[data-news-id]")?.dataset.newsId;
+
+    if (id) {
+        const key = `cuf_view_${id}`;
+        let shouldCount = true;
+        try {
+            const last = Number(localStorage.getItem(key));
+            shouldCount = !last || Date.now() - last > DAY_MS;
+        } catch {
+            // storage bloqueado (modo privado, etc.): contamos igual
+        }
+
+        if (shouldCount) {
+            fetch(`${API}/news/${id}/view`, { method: "POST", keepalive: true })
+                .then((res) => {
+                    if (!res.ok) return;
+                    try {
+                        localStorage.setItem(key, String(Date.now()));
+                    } catch {}
+                })
+                .catch(() => {});
+        }
+    }
+</script>

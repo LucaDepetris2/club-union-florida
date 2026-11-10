@@ -20,9 +20,13 @@ app.use(helmet({
     useDefaults: true,
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "https://api.cloudinary.com", "https://formspree.io"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      connectSrc: [
+        "'self'", "https://api.cloudinary.com", "https://formspree.io",
+        // Google Analytics 4
+        "https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com"
+      ],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
       childSrc: ["'self'", "https://www.google.com", "https://maps.google.com"]
@@ -129,15 +133,39 @@ app.get('/api/news/:id', async (req, res) => {
   res.json(mapId(item));
 });
 
+// El contador de vistas solo se modifica con $inc; nunca desde el payload del admin
+// (el admin reenvía el item completo y pisaría las vistas con un valor viejo)
+const stripNewsMeta = body => {
+  const payload = { ...body };
+  delete payload.views;
+  delete payload._id;
+  delete payload.id;
+  return payload;
+};
+
+// Vistas por noticia: lo llama el navegador al abrir /noticias/:id
+const viewLimiter = rateLimit({ windowMs: 60_000, max: 30, standardHeaders: true, legacyHeaders: false });
+
+app.post('/api/news/:id/view', viewLimiter, async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).json({ error: 'Id inválido' });
+  try {
+    await News.updateOne({ _id: req.params.id }, { $inc: { views: 1 } });
+    res.status(204).end();
+  } catch (err) {
+    console.error('Error sumando vista:', err);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
 app.post('/api/news', requireAdmin, async (req, res) => {
-  const payload = { ...req.body };
+  const payload = stripNewsMeta(req.body);
   if (payload.image) payload.image = await maybeUploadToCloudinary(payload.image);
   const doc = await News.create(payload);
   res.status(201).json({ id: doc._id });
 });
 
 app.put('/api/news/:id', requireAdmin, async (req, res) => {
-  const payload = { ...req.body };
+  const payload = stripNewsMeta(req.body);
   if (payload.image && payload.image.startsWith('data:')) {
     payload.image = await maybeUploadToCloudinary(payload.image);
   }
